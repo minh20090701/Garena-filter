@@ -1,0 +1,57 @@
+{
+  "passed": 9,
+  "failed": 1,
+  "results": [
+    {
+      "name": "Local startup and local tools make zero external requests",
+      "status": "PASS",
+      "ms": 3033
+    },
+    {
+      "name": "Navigation search truly hides unmatched tools and handles accents",
+      "status": "PASS",
+      "ms": 1948
+    },
+    {
+      "name": "Clipboard absent and rejected fall back without losing selection or lying about failure",
+      "status": "PASS",
+      "ms": 2076
+    },
+    {
+      "name": "Malformed quoted CSV import is atomic and does not corrupt undo",
+      "status": "PASS",
+      "ms": 2215
+    },
+    {
+      "name": "Duplicate backup IDs become independent records",
+      "status": "PASS",
+      "ms": 1603
+    },
+    {
+      "name": "Legacy headerless extra columns survive import, full copy and CSV roundtrip",
+      "status": "PASS",
+      "ms": 2645
+    },
+    {
+      "name": "Restored HTML-looking data and dataset names remain escaped text",
+      "status": "PASS",
+      "ms": 1694
+    },
+    {
+      "name": "10,000 rows import and subsequent filtering remain usable",
+      "status": "FAIL",
+      "error": "locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#rawData')\u001b[22m\n\u001b[2m    - locator resolved to <textarea id=\"rawData\" spellcheck=\"false\" placeholder=\"Ví dụ: tài_khoản|mật_khẩu|tên|level\"></textarea>\u001b[22m\n\u001b[2m    - fill(\"large0|pw|Name 0|0\u001b[22m\n\u001b[2mlarge1|pw|Name 1|1\u001b[22m\n\u001b[2mlarge2|pw|Name 2|2\u001b[22m\n\u001b[2mlarge3|pw|Name 3|3\u001b[22m\n\u001b[2mlarge4|pw|Name 4|4\u001b[22m\n\u001b[2mlarge5|pw|Name 5|5\u001b[22m\n\u001b[2mlarge6|pw|Name 6|6\u001b[22m\n\u001b[2mlarge7|pw|Name 7|7\u001b[22m\n\u001b[2mlarge8|pw|Name 8|8\u001b[22m\n\u001b[2mlarge9|pw|Name 9|9\u001b[22m\n\u001b[2mlarge10|pw|Name 10|10\u001b[22m\n\u001b[2mlarge11|pw|Name 11|11\u001b[22m\n\u001b[2mlarge12|pw|Name 12|12\u001b[22m\n\u001b[2mlarge13|pw|Name 13|13\u001b[22m\n\u001b[2mlarge14|pw|Name 14|14\u001b[22m\n\u001b[2mlarge15|pw|Name",
+      "ms": 33133
+    },
+    {
+      "name": "Selection across pages and filters remains explicit on copy/delete pages",
+      "status": "PASS",
+      "ms": 7663
+    },
+    {
+      "name": "Pending TOTP cannot reappear after clearing secret; expired copy is rejected",
+      "status": "PASS",
+      "ms": 2851
+    }
+  ]
+}

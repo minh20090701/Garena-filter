@@ -1,0 +1,11 @@
+{
+  "Garena_Filter_Pro_V4.html": "450e3a02fa53df07cd722c911b67931748b554cb33db98bf0e3ba4c2756a9ddd",
+  "src/auth.js": "251b1acdbab61d2154fb2b531bf414afc19aa0465c87ad311888df56545c43b0",
+  "src/core.js": "3c697d6c5eb285efd56e1d022c4909d9d5cf02e833a4024db93865b9b59eab7b",
+  "src/events.js": "ac4be5a094d3c13cecf48f90366817d6aa2ef4057902d35bb5e0b8163f714ce1",
+  "src/mail.js": "5b399f2fa7bb4b0c0526a23b36f6066d390cceadd638f6f13d9b50fe7cef49d9",
+  "src/sdk.js": "7d1828613c08bac8ce254fc6c3bbdbdf5c1330f80425c5bf37aaee11b29dce1e",
+  "src/template.html": "e2a9d9d2c5db0b1519f29b9209315defdd996ed181a72298c50e1049a06c9cad",
+  "src/tools.js": "579a6fa313e50e7608a20292e0bb54d3cae0566e7043c050ae37e9a5f8d21ebf",
+  "src/upgrade.css": "bd7673827bfd9423eb221ede970559f7e77ea6bd7d1a4445241d4e1f31d13b9c"
+}

@@ -1,0 +1,1225 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Garena Filter Pro V4 · Không gian dữ liệu</title>
+    <meta name="description" content="Nhập, lọc và quản lý dữ liệu tài khoản trong một không gian làm việc gọn gàng. Hỗ trợ TXT, CSV, JSON và các tiện ích xử lý văn bản.">
+    <meta name="color-scheme" content="light dark">
+    <style>
+        :root {
+            --bg: #f2f5fa;
+            --panel: #fff;
+            --text: #172033;
+            --muted: #778399;
+            --line: #e5eaf2;
+            --blue: #1769f5;
+            --blue2: #6246ea;
+            --input: #f8faff;
+            --shadow: 0 5px 20px #20345b0d
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font: 14px/1.45 Inter, Segoe UI, Arial, sans-serif
+        }
+
+        body.dark {
+            --bg: #0b1220;
+            --panel: #111c2d;
+            --text: #e8eef9;
+            --muted: #96a5bd;
+            --line: #24334a;
+            --input: #0c1728;
+            --shadow: 0 5px 20px #0002
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            min-height: 100vh
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, #091322, #101d30);
+            color: #e9f1ff;
+            padding: 18px 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 5px 24px;
+            font-weight: 900;
+            font-size: 21px
+        }
+
+        .brand .fire {
+            font-size: 32px
+        }
+
+        .brand small {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: #aab9d2
+        }
+
+        .navhead {
+            font-size: 10px;
+            color: #71839d;
+            letter-spacing: 1px;
+            margin: 16px 8px 5px
+        }
+
+        .nav {
+            border: 0;
+            background: transparent;
+            color: #dce7f8;
+            text-align: left;
+            padding: 11px 12px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 650;
+            display: flex;
+            gap: 10px;
+            align-items: center
+        }
+
+        .nav:hover,
+        .nav.active {
+            background: linear-gradient(100deg, #1469f7, #2854db);
+            color: white
+        }
+
+        .status {
+            margin-top: auto;
+            background: #17263a;
+            border: 1px solid #263750;
+            padding: 13px;
+            border-radius: 12px;
+            font-size: 12px
+        }
+
+        .status b {
+            font-size: 14px
+        }
+
+        .dot {
+            color: #2fda81
+        }
+
+        .main {
+            min-width: 0
+        }
+
+        .topbar {
+            height: 76px;
+            background: linear-gradient(105deg, #1769ed, #7840d7);
+            color: white;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px
+        }
+
+        .topbar h1 {
+            font-size: 19px;
+            margin: 0
+        }
+
+        .topbar p {
+            font-size: 12px;
+            margin: 3px 0 0;
+            opacity: .85
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center
+        }
+
+        .btn {
+            border: 1px solid var(--line);
+            background: var(--panel);
+            color: var(--text);
+            padding: 9px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 650;
+            white-space: nowrap
+        }
+
+        .btn:hover {
+            filter: brightness(.97)
+        }
+
+        .primary {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: white
+        }
+
+        .purple {
+            background: var(--blue2);
+            border-color: var(--blue2);
+            color: #fff
+        }
+
+        .green {
+            background: #19a65a;
+            border-color: #19a65a;
+            color: #fff
+        }
+
+        .red {
+            background: #ef4057;
+            border-color: #ef4057;
+            color: #fff
+        }
+
+        .orange {
+            background: #f5a400;
+            border-color: #f5a400;
+            color: #171717
+        }
+
+        .content {
+            padding: 20px;
+            max-width: 1800px;
+            margin: auto
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(220px, 1fr));
+            gap: 13px;
+            margin-bottom: 16px
+        }
+
+        .stat,
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            box-shadow: var(--shadow)
+        }
+
+        .stat {
+            padding: 20px;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            min-width: 0;
+            min-height: 112px
+        }
+
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #e7f3ff;
+            font-size: 21px;
+            flex-shrink: 0
+        }
+
+        .stat:nth-child(2) .stat-icon {
+            background: #dcfce8
+        }
+
+        .stat:nth-child(3) .stat-icon {
+            background: #fce7f3
+        }
+
+        .stat:nth-child(4) .stat-icon {
+            background: #ffedd5
+        }
+
+        .stat:nth-child(5) .stat-icon {
+            background: #cffafe
+        }
+
+        .stat:nth-child(6) .stat-icon {
+            background: #fce7f3
+        }
+
+        .stat label {
+            display: block;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 750
+        }
+
+        .stat strong {
+            font-size: 22px;
+            display: block;
+            margin-top: 3px
+        }
+
+        .stat small {
+            color: var(--muted);
+            font-size: 11px
+        }
+
+        .panel {
+            padding: 16px;
+            margin-bottom: 16px
+        }
+
+        .panel-title {
+            font-weight: 800;
+            margin: 0 0 13px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            align-items: end;
+            flex-wrap: wrap
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 120px;
+            flex: 1
+        }
+
+        .field label {
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        .field input,
+        .field select,
+        .field textarea,
+        input,
+        select,
+        textarea {
+            font: inherit;
+            color: var(--text)
+        }
+
+        .field input,
+        .field select,
+        .field textarea,
+        .control {
+            border: 1px solid var(--line);
+            background: var(--input);
+            padding: 10px;
+            border-radius: 8px;
+            outline: none;
+            width: 100%
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: #528bff;
+            box-shadow: 0 0 0 3px #1769f51c
+        }
+
+        .field textarea {
+            resize: vertical;
+            min-height: 120px
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px
+        }
+
+        .checks {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            align-items: center
+        }
+
+        .checks label {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            font-size: 12px
+        }
+
+        .checks input {
+            accent-color: #1769f5
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center
+        }
+
+        .push {
+            margin-left: auto
+        }
+
+        .table-wrap {
+            overflow: auto;
+            border: 1px solid var(--line);
+            border-radius: 8px
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 1050px;
+            font-size: 12px
+        }
+
+        thead {
+            background: #101d30;
+            color: #fff
+        }
+
+        th,
+        td {
+            padding: 11px 9px;
+            text-align: left;
+            border-bottom: 1px solid var(--line);
+            white-space: nowrap
+        }
+
+        tbody tr:nth-child(even) {
+            background: color-mix(in srgb, var(--bg) 72%, var(--panel))
+        }
+
+        tbody tr:hover {
+            background: color-mix(in srgb, #1769f5 8%, var(--panel))
+        }
+
+        th button {
+            color: inherit;
+            background: none;
+            border: 0;
+            cursor: pointer;
+            font-weight: 800
+        }
+
+        .tag {
+            padding: 4px 7px;
+            border-radius: 20px;
+            background: #dcfce7;
+            color: #167844;
+            font-weight: 750;
+            font-size: 11px
+        }
+
+        .tag.gray {
+            background: #e9edf4;
+            color: #536174
+        }
+
+        .empty {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 13px
+        }
+
+        .pagination span {
+            margin-right: auto;
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .hidden {
+            display: none !important
+        }
+
+        .notice {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 8px
+        }
+
+        .split {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 14px
+        }
+
+        .small {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--line);
+            margin: 14px 0
+        }
+
+        .toast {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            background: #122036;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px #0003;
+            z-index: 20;
+            display: none;
+            max-width: 360px
+        }
+
+        .mobile-menu {
+            display: none
+        }
+        .sidebar-mobile-head { display:none; align-items:center; justify-content:space-between; gap:10px; padding:2px 4px 12px; }
+        .sidebar-close { border:0; border-radius:9px; padding:8px 11px; background:#263754; color:#fff; font-size:18px; cursor:pointer; }
+        .sidebar-backdrop { display:none; }
+
+        @media(max-width:1200px) {
+            .stats {
+                grid-template-columns: repeat(3, minmax(0, 1fr))
+            }
+
+            .app {
+                grid-template-columns: 190px 1fr
+            }
+
+            .content {
+                padding: 14px
+            }
+        }
+
+        @media(max-width:760px) {
+            .app {
+                display: block
+            }
+
+            .sidebar {
+                display: none;
+                position: fixed;
+                z-index: 1002;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                width: min(280px, 82vw);
+                max-width: 82vw;
+                overflow-y: auto;
+                box-shadow: 12px 0 36px #0007;
+            }
+
+            .sidebar.open { display: flex; }
+            .sidebar-mobile-head { display:flex; }
+            .sidebar-backdrop { display:block; position:fixed; inset:0; z-index:1001; background:#02061799; opacity:0; pointer-events:none; transition:opacity .18s ease; }
+            .sidebar-backdrop.open { opacity:1; pointer-events:auto; }
+
+            .topbar {
+                height: auto;
+                padding: 15px;
+                align-items: flex-start
+            }
+
+            .topbar h1 {
+                font-size: 16px
+            }
+
+            .mobile-menu {
+                display: inline-block
+            }
+
+            .top-actions .btn {
+                font-size: 11px;
+                padding: 8px
+            }
+
+            .content {
+                padding: 10px
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px
+            }
+
+            .stat {
+                padding: 11px;
+                gap: 8px
+            }
+
+            .stat-icon {
+                width: 34px;
+                height: 34px
+            }
+
+            .stat strong {
+                font-size: 18px
+            }
+
+            .feature-grid,
+            .split {
+                grid-template-columns: 1fr
+            }
+
+            .panel {
+                padding: 12px
+            }
+
+            .push {
+                margin-left: 0
+            }
+
+            .status {
+                margin-top: 12px
+            }
+        }
+
+        .auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 15% 10%,#2563eb 0,transparent 35%),linear-gradient(135deg,#07111f,#151d3a 55%,#37266e);color:#172033}
+        .auth-card{width:min(100%,440px);background:#fff;border:1px solid #ffffff50;border-radius:22px;padding:28px;box-shadow:0 24px 80px #0004}
+        .auth-brand{font-size:24px;font-weight:900;margin-bottom:4px;color:#111b32}.auth-sub{color:#66748c;margin-bottom:22px}
+        .auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:5px;background:#eef2f8;border-radius:12px;margin-bottom:18px}
+        .auth-tabs button{border:0;padding:11px;border-radius:9px;background:transparent;font-weight:800;cursor:pointer;color:#64748b}.auth-tabs button.active{background:#fff;color:#1d4ed8;box-shadow:0 1px 5px #0001}
+        .auth-field{display:block;margin:13px 0 5px;font-size:12px;font-weight:800;color:#475569}.auth-input{width:100%;padding:12px 13px;border:1px solid #dbe3ef;border-radius:10px;font:inherit;background:#fbfcff;color:#111827}
+        .auth-submit{width:100%;margin-top:18px;padding:13px;border:0;border-radius:11px;background:linear-gradient(100deg,#1769f5,#6942e8);color:white;font-weight:900;cursor:pointer}
+        .auth-forgot{display:block;margin:10px 0 0 auto;padding:0;border:0;background:transparent;color:#315fe8;font-size:12px;font-weight:700;cursor:pointer}
+        .auth-submit:disabled,.auth-forgot:disabled{opacity:.6;cursor:wait}
+        .auth-note{font-size:12px;color:#64748b;line-height:1.55;margin-top:15px}.auth-message{font-size:13px;margin-top:12px;color:#b91c1c;white-space:pre-wrap}.auth-config{display:none;background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:12px;margin:12px 0;color:#9a3412;font-size:12px;line-height:1.5}
+        .user-pill{font-size:12px;color:inherit;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;align-self:center}
+        .hidden{display:none!important}
+    
+        .settings-launcher{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+        .settings-tile{display:flex;align-items:center;gap:12px;text-align:left;width:100%;padding:15px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--text);cursor:pointer;transition:border-color .18s,transform .18s,box-shadow .18s;min-width:0}
+        .settings-tile:hover{transform:translateY(-1px);box-shadow:0 8px 22px #0000000c}
+        .settings-tile.active{border-color:#4778ff;box-shadow:0 0 0 2px #4778ff20}
+        .settings-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;background:var(--soft);font-size:21px;flex-shrink:0}
+        .settings-tile b,.settings-tile small{display:block}.settings-tile b{font-size:13px}.settings-tile small{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.45}.settings-arrow{margin-left:auto;font-size:24px;color:var(--muted)}
+        .settings-pane{animation:settingsFadeIn .18s ease-out}.settings-pane.hidden{display:none!important}
+        @keyframes settingsFadeIn{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+        @media(max-width:640px){.settings-launcher{grid-template-columns:1fr}.settings-tile{padding:13px}.settings-icon{width:38px;height:38px}}
+
+        /* Garena Filter Pro • Modern 2026 UI refresh */
+        :root { --bg:#eef2fa;--panel:#ffffff;--text:#16223b;--muted:#65748f;--line:#e3e9f5;
+            --blue:#496af5;--blue2:#8861f6;--input:#f6f8fd;--shadow:0 12px 38px rgba(28,48,101,.06);--card:var(--panel);--soft:#eef0ff; }
+        body.dark {--bg:#080f1f;--panel:#121d31;--text:#edf3ff;--muted:#95a5c3;--line:#283852;
+            --blue:#567afa;--blue2:#9464fb;--input:#0c1729;--shadow:0 14px 38px #00000024;--card:var(--panel);--soft:#1b2d4c;}
+        body {background:var(--bg);letter-spacing:.03px;}
+        body.dark .main {background:radial-gradient(circle at 80% 0%,#16264a 0,transparent 35%),radial-gradient(circle at 0 60%,#141c37 0,transparent 40%),var(--bg);}
+        .app {grid-template-columns:246px minmax(0,1fr);}
+        .sidebar {background:linear-gradient(170deg,#0b1531 0%,#101b36 57%,#0a1329 100%);padding:24px 16px;gap:6px;border-right:1px solid #27365f;box-shadow:8px 0 36px #05091810;}
+        .brand {padding:10px 8px 26px;font-size:18px;line-height:1.18;letter-spacing:.5px;}
+        .brand .fire {font-size:31px;filter:drop-shadow(0 2px 10px #8f5bff60);}
+        .brand small {margin-top:7px;color:#9aaade;font-weight:650;letter-spacing:3.6px;}
+        .navhead {color:#8496bf;letter-spacing:2px;font-size:10px;margin:22px 11px 7px;font-weight:750;}
+        .nav {padding:13px 13px;border-radius:12px;transition:background .18s,transform .18s,color .18s;color:#b4c3e1;font-size:13px;}
+        .nav:hover {background:#263962;color:#fff;transform:translateX(2px);}
+        .nav.active {background:linear-gradient(110deg,#3f70ff,#8052df);color:#fff;box-shadow:0 7px 18px #2f54e740;}
+        .topbar {height:84px;background:linear-gradient(105deg,#172a55 0%,#1b3470 45%,#412b75 100%);border-bottom:1px solid #ffffff19;padding:0 30px;}
+        .topbar h1 {font-size:21px;font-weight:850;letter-spacing:-.6px;}
+        .top-actions {gap:9px;flex-wrap:wrap;justify-content:flex-end;}
+        .topbar .btn {background:#ffffff16;border:1px solid #ffffff36;color:#fff;backdrop-filter:blur(7px);}
+        .topbar .btn:hover {background:#ffffff2c;}
+        .user-pill {background:#ffffff15;border:1px solid #ffffff30;padding:8px 11px;border-radius:25px;color:#e5edff;}
+        .content {padding:26px;max-width:1780px;}
+        .stats {grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:23px;}
+        .stat,.panel {border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow);}
+        .stat {min-height:118px;padding:20px 22px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;}
+        .stat:hover,.panel:hover {box-shadow:0 15px 40px #070d251a;}
+        .stat:hover {transform:translateY(-2px);}
+        .stat::after {content:'';position:absolute;right:-37px;top:-44px;width:120px;height:120px;border-radius:50%;background:linear-gradient(130deg,#7488ff18,#9761ed02);pointer-events:none;}
+        .stat-icon {border-radius:15px!important;width:50px;height:50px;font-size:24px!important;background:#657fff23!important;border:1px solid #7f91ff2b;}
+        .stat:nth-child(2) .stat-icon {background:#27c7a51a!important;}
+        .stat:nth-child(3) .stat-icon {background:#c675ff23!important;}
+        .stat:nth-child(4) .stat-icon {background:#ffb65c22!important;}
+        .stat:nth-child(5) .stat-icon {background:#54bffd24!important;}
+        .stat:nth-child(6) .stat-icon {background:#ff719225!important;}
+        .stat label {font-size:10px;letter-spacing:1px;color:var(--muted);}
+        .stat strong {font-size:28px;letter-spacing:-1px;line-height:1.35;}
+        .panel {padding:21px 23px;margin-bottom:19px;}
+        .panel-title {font-size:15px;letter-spacing:-.15px;font-weight:800;margin-bottom:18px;}
+        .header-kicker {font-size:10px;color:#9baeff;background:#496cf020;border:1px solid #506df03c;padding:5px 9px;border-radius:100px;letter-spacing:1.5px;}
+        .field label {font-size:12px;color:var(--muted);font-weight:730;}
+        .field input,.field select,.field textarea,.control {background:var(--input);border:1px solid var(--line);border-radius:11px;padding:11px 12px;color:var(--text);transition:border-color .17s,box-shadow .17s;}
+        .field textarea {min-height:160px;line-height:1.7;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;padding:14px 16px;}
+        .field input:focus,.field select:focus,.field textarea:focus {border-color:#728cff;box-shadow:0 0 0 4px #5576ee25;}
+        .btn {padding:10px 14px;border-radius:11px;transition:filter .18s,transform .18s,box-shadow .18s;font-size:12px;}
+        .btn:hover {filter:brightness(1.1);transform:translateY(-1px);}
+        .btn:active {transform:translateY(0);}
+        .btn.primary,.btn.purple {background:linear-gradient(110deg,#4577fc,#8358f0);border-color:transparent;color:white;box-shadow:0 4px 14px #465ef43b;}
+        .btn.green {background:#168c75;border-color:#168c75;}
+        .btn.orange {background:#dd8e31;border-color:#dd8e31;color:#fff;}
+        .btn.red {background:#dd4968;border-color:#dd4968;}
+        .divider {margin:20px 0;}
+        .notice {border:1px solid var(--line);background:var(--input);padding:11px 14px;border-radius:10px;margin-top:16px;line-height:1.6;}
+        .table-wrap {border-radius:14px;}
+        thead {background:#1c2b49;}
+        th {letter-spacing:.65px;font-size:10px;}
+        th,td {padding:13px 11px;}
+        tbody tr:hover {background:#718efa16;}
+        .pagination {margin-top:18px;}
+        .editor-heading {display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px;flex-wrap:wrap;}
+        .dedupe-badge {display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:5px 11px;color:#77e3c1;font-size:11px;font-weight:750;background:#18b8901a;border:1px solid #26c6a13b;}
+        body:not(.dark) .dedupe-badge {color:#078269;background:#dff9f0;}
+        .dedupe-hint {font-size:11px;color:var(--muted);margin-top:8px;min-height:16px;}
+        .dedupe-hint.has-duplicates {color:#58ceae;font-weight:700;}
+        body:not(.dark) .dedupe-hint.has-duplicates {color:#088167;}
+        .settings-tile {background:var(--panel);}
+        .auth-screen {background:radial-gradient(ellipse at 16% 17%,#244dbb8c 0,transparent 42%),radial-gradient(ellipse at 90% 87%,#6d30af65 0,transparent 48%),#091225;}
+        .auth-card {border-radius:25px;box-shadow:0 28px 100px #0008;padding:35px;}
+        .auth-submit {padding:14px;border-radius:12px;}
+        @media (max-width:1200px) {.app {grid-template-columns:205px minmax(0,1fr);} .content {padding:20px;} .stats {grid-template-columns:repeat(3,minmax(0,1fr));}}
+        @media (max-width:930px) {.stats {grid-template-columns:repeat(2,minmax(0,1fr));}.topbar {padding:0 17px;}}
+        @media (max-width:760px) {.app {display:block;}.sidebar {width:min(280px,82vw);}.content {padding:13px;}.topbar {min-height:72px;height:auto;padding:14px;flex-wrap:wrap;gap:10px;}.top-actions {gap:6px;}.top-actions .btn {padding:7px 9px;}.stats {gap:10px;}.stat {min-height:97px;padding:12px;gap:9px;}.stat strong {font-size:21px;}.stat-icon {width:38px;height:38px;font-size:19px!important;}.stat label {font-size:9px;}.stat small {font-size:10px;}.panel {padding:15px;margin-bottom:13px;}.panel-title {font-size:14px;}.pagination {flex-wrap:wrap;}.user-pill {max-width:115px;}}
+        @media (prefers-reduced-motion:reduce) {.nav,.btn,.stat {transition:none!important;}}
+
+
+        /* Full Tools — independent sidebar + workspace scrolling */
+        @media(min-width:761px){
+          .app {height:100vh;min-height:0;}
+          .sidebar {height:100vh;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#546aa1 transparent;}
+          .main {height:100vh;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;}
+        }
+        .nav-count {float:right;margin-left:7px;font-size:10px;letter-spacing:.1em;opacity:.7}
+        .fold-heading,.account-list-head {display:flex;align-items:center;flex-wrap:wrap;gap:9px;}
+        .fold-heading>.btn {margin-left:auto;}
+        .account-list-head>.privacy-actions {margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
+        .privacy-actions .btn {font-size:11px;padding:8px 10px;}
+        [id^="page-tool-"] .panel {max-width:1000px;padding:25px;}
+        [id^="page-tool-"] .panel-title {font-size:19px;margin-bottom:10px;}
+        [id^="page-tool-"] .field textarea {min-height:150px;resize:vertical;}
+        [id^="page-tool-"] .field textarea[readonly] {background:color-mix(in srgb,var(--input) 88%,var(--blue) 12%);}
+        [id^="page-tool-"] .toolbar {margin:15px 0;}
+        [id^="page-tool-"] .notice strong {color:var(--blue);}
+        @media(max-width:760px){[id^="page-tool-"] .panel{padding:16px;}.account-list-head>.privacy-actions{margin-left:0;width:100%;}}
+
+/* Tool workspace: modern mobile-first utilities */
+.tool-panel{max-width:1140px;margin:0 auto 20px;padding:clamp(16px,2.5vw,30px)!important;border-radius:20px!important;overflow:hidden}
+.tool-heading{background:linear-gradient(115deg,#1a5dee 0%,#5a44d7 55%,#824add 100%);margin:calc(-1 * clamp(16px,2.5vw,30px)) calc(-1 * clamp(16px,2.5vw,30px)) 24px;padding:24px clamp(16px,2.5vw,30px);color:#fff}
+.tool-heading h2{font-size:clamp(19px,2.3vw,25px);margin:7px 0 8px;letter-spacing:-.5px;line-height:1.3}
+.tool-heading p{margin:0;font-size:13px;line-height:1.6;color:#e9eaff;max-width:730px}
+.tool-tag{font-size:10px;letter-spacing:1.3px;font-weight:850;opacity:.78}
+.tool-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}
+.tool-grid .field{min-width:0}.tool-grid .field input,.tool-grid .field select,.tool-grid .field textarea{width:100%;min-width:0}
+[id^="page-tool-"] .field {margin:12px 0}
+[id^="page-tool-"] .field label{font-size:12px;display:block;margin-bottom:8px;font-weight:800;letter-spacing:.1px}
+[id^="page-tool-"] .field textarea{min-height:145px;max-width:100%;font-size:13px}
+[id^="page-tool-"] .field textarea.short-textarea{min-height:96px}
+[id^="page-tool-"] .field textarea[readonly]{min-height:150px}
+.tool-actions{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0!important}
+.tool-actions .btn{min-height:42px;padding:10px 15px}
+.tool-note,.tool-stats{border:1px solid #667ff544;background:color-mix(in srgb,var(--input) 88%,var(--blue) 12%);padding:13px 15px;border-radius:12px;color:var(--text);font-size:12px;line-height:1.65;margin:13px 0}
+.tool-stats{font-weight:800}
+.tool-options{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:14px 0;font-size:13px}
+.tool-options label{display:flex;align-items:center;gap:7px;cursor:pointer}
+.tool-options input[type="checkbox"]{accent-color:#665cf5;width:17px;height:17px}
+.tool-options .btn.tiny{padding:7px 12px;min-height:34px}
+.split-columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:12px;margin:14px 0}
+.split-column{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--input);min-width:0}
+.split-column-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.split-column .field textarea{min-height:125px!important}
+.join-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.join-column{padding:14px;border-radius:14px;border:1px solid var(--line);background:var(--input);min-width:0}
+.join-column h3{font-size:14px;margin:0 0 4px}
+.join-column textarea{min-height:190px!important}
+/* Ghép nhiều cột: input full width, đúng màu nền, dễ dùng trên mobile */
+#page-tool-join .join-fields{width:100%;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+#page-tool-join .join-column{width:100%;min-width:0;padding:18px;border-radius:16px}
+#page-tool-join .join-column .join-value{
+  display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;
+  min-height:210px!important;padding:16px;border:1px solid var(--line);
+  border-radius:12px;background:var(--panel);color:var(--text);
+  font:inherit;font-size:14px;line-height:1.65;resize:vertical;outline:none;
+}
+#page-tool-join .join-column .join-value::placeholder{color:var(--muted);opacity:.85}
+#page-tool-join .join-column .join-value:focus{border-color:#728cff;box-shadow:0 0 0 3px #5576ee25}
+@media(max-width:760px){
+  #page-tool-join .join-fields{grid-template-columns:minmax(0,1fr);gap:14px}
+  #page-tool-join .join-column{padding:14px}
+  #page-tool-join .join-column .join-value{min-height:240px!important;font-size:16px}
+  #page-tool-join .tool-options{gap:8px}
+}
+@media(max-width:760px){.tool-grid,.join-fields{grid-template-columns:1fr}.tool-heading{margin-bottom:16px}.tool-actions .btn{flex:1 1 135px}.tool-panel{border-radius:14px!important}.tool-options{gap:10px}.split-columns{grid-template-columns:1fr}}
+
+
+/* Microsoft Mail Reader – riêng biệt với dữ liệu Garena */
+.mail-hero{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:15px}
+.mail-heading{font-size:21px;font-weight:850;letter-spacing:-.6px;margin:0 0 7px}
+.mail-caption{color:var(--muted);font-size:12px;line-height:1.7;max-width:690px}
+.mail-pill{border:1px solid var(--line);background:var(--input);padding:9px 13px;border-radius:999px;color:var(--muted);font-size:12px;max-width:100%;overflow-wrap:anywhere}
+.mail-pill.online{color:#4ee3b2;border-color:#4ee3b255;background:#11a78011}
+.mail-guide{border-radius:14px;padding:15px 17px;background:linear-gradient(115deg,#4356c119,#8760c515);border:1px solid #7787ee35;margin:12px 0 20px;line-height:1.85;font-size:12px}
+.mail-grid{display:grid;grid-template-columns:minmax(250px,340px) minmax(0,1fr);gap:14px;align-items:start;margin-top:13px}
+.mail-list{display:flex;flex-direction:column;gap:7px;max-height:530px;overflow-y:auto;padding-right:3px;min-height:140px}
+.mail-list-item{display:block;text-align:left;color:var(--text);width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--input);cursor:pointer;min-height:70px}
+.mail-list-item:hover,.mail-list-item.active{border-color:#7986ff;background:#6a70ed15}
+.mail-list-item strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;margin:4px 0}
+.mail-list-item span,.mail-list-item small{display:block;color:var(--muted);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mail-detail{border:1px solid var(--line);border-radius:14px;padding:16px;min-height:280px;background:var(--input);overflow-wrap:anywhere}
+.mail-detail-body{white-space:pre-wrap;word-break:break-word;font-size:12px;line-height:1.9;max-height:440px;overflow:auto;margin-top:15px}
+.mail-empty{color:var(--muted);text-align:center;padding:22px 10px;font-size:12px;line-height:1.8}
+.mail-code-card{border-radius:12px;padding:12px 15px;border:1px solid #7986ff45;background:#5965e315;margin-bottom:10px}
+.mail-code-card strong{font-size:20px;letter-spacing:2px;display:block;margin:6px 0}
+.mail-code-card small{color:var(--muted);display:block;font-size:11px;overflow-wrap:anywhere}
+.mail-muted{font-size:11px;color:var(--muted);line-height:1.7}
+.mail-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.mail-actions .btn{min-height:36px}
+@media(max-width:800px){.mail-grid{grid-template-columns:1fr}.mail-list{max-height:310px}.mail-heading{font-size:18px}.mail-hero{flex-direction:column}.mail-detail{min-height:170px}}
+
+</style>
+</head>
+
+<body>
+    <section id="authScreen" class="auth-screen">
+  <div class="auth-card">
+    <div class="auth-brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M8 8h16l-6 8v8l-4-2v-6z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg></span><span>Garena Filter <b>Pro</b></span></div>
+    <div class="auth-sub">Một nơi cho dữ liệu. Mọi thứ trong tầm tay.</div>
+    <div id="authConfig" class="auth-config">Chưa cấu hình Supabase. Hãy mở file HTML, tìm hai biến <b>SUPABASE_URL</b> và <b>SUPABASE_ANON_KEY</b> trong phần JavaScript rồi điền thông tin Project của bạn. Không dùng service_role key ở trình duyệt.</div>
+    <div class="auth-tabs"><button type="button" id="loginTab" class="active">Đăng nhập</button><button type="button" id="signupTab">Đăng ký</button></div>
+    <form id="authForm">
+      <label class="auth-field" for="authEmail">Email</label><input class="auth-input" id="authEmail" type="email" autocomplete="email" placeholder="Email" required>
+      <label class="auth-field" for="authPassword">Mật khẩu</label><input class="auth-input" id="authPassword" type="password" autocomplete="current-password" minlength="8" placeholder="Nhập mật khẩu của bạn" required>
+      <button class="auth-submit" id="authSubmit" type="submit">Đăng nhập</button>
+      <button class="auth-forgot" id="forgotPasswordBtn" type="button">Quên mật khẩu?</button>
+    </form>
+    <div id="authMessage" class="auth-message" role="status"></div>
+    <div class="auth-divider"><span>hoặc bắt đầu ngay</span></div><button type="button" class="btn local-entry" id="localModeBtn">Dùng trên máy · không cần đăng nhập <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button><div class="auth-note">Chế độ trên máy chỉ lưu trong trình duyệt này. Đăng nhập để đồng bộ dữ liệu qua tài khoản của bạn.</div>
+  </div>
+</section>
+
+    <div class="app hidden" id="mainApp">
+        <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
+        <aside class="sidebar" id="sidebar" aria-label="Menu chính">
+            <div class="sidebar-mobile-head"><strong>MENU</strong><button type="button" class="sidebar-close" id="sidebarClose" aria-label="Đóng menu">✕</button></div>
+            <div class="brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M8 8h16l-6 8v8l-4-2v-6z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg></span><div>Garena Filter<small>PRO WORKSPACE <span>V4</span></small></div></div>
+            <div class="nav-search"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></svg><input id="navSearch" type="search" aria-label="Tìm công cụ trong menu" placeholder="Tìm công cụ…" autocomplete="off"><kbd>/</kbd></div>
+            <div class="navhead">KHÔNG GIAN LÀM VIỆC</div><button class="nav active"
+                data-page="dashboard"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Tổng quan</span></button><button class="nav" data-page="parser"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V3m-4 4 4-4 4 4M4 15v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg><span>Phân tích dữ liệu</span></button><button class="nav" data-page="filter"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16l-6 7v6l-4 2v-8z"/></svg><span>Bộ lọc nâng cao</span></button><button class="nav"
+                data-page="saves"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span>Bộ dữ liệu đã lưu</span></button><button class="nav" data-page="settings"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="9" cy="18" r="2"/></svg><span>Cài đặt</span></button>
+            <div class="navhead">TIỆN ÍCH</div><button class="nav" data-page="copy"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép định dạng</span></button><button
+                class="nav" data-page="export"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13m-4-4 4 4 4-4M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg><span>Xuất dữ liệu</span></button><button class="nav" data-page="delete"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></svg><span>Xóa đã chọn</span></button>
+                        <div class="navhead">CÔNG CỤ <span class="nav-count">13</span></div>
+            <button class="nav" data-page="tool-2fa"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6zM8 12l3 3 5-6"/></svg><span>Mã xác thực 2FA</span></button>
+            <button class="nav" data-page="tool-sequence"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h12M9 12h12M9 18h12M3 6h1m-1 6h1m-1 6h1"/></svg><span>Tạo danh sách số</span></button>
+            <button class="nav" data-page="tool-chain"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Thêm tiền tố / hậu tố</span></button>
+            <button class="nav" data-page="tool-sort"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v18m-4-4 4 4 4-4M16 21V3m-4 4 4-4 4 4"/></svg><span>Sắp xếp tài khoản</span></button>
+            <button class="nav" data-page="tool-split"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-7c0-4-6-3-6-7V3m12 0v4c0 4-6 3-6 7M3 6l3-3 3 3m6 0 3-3 3 3"/></svg><span>Tách chuỗi</span></button>
+            <button class="nav" data-page="tool-replace"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 4 5 5-11 11-6 1 1-6zM13 6l5 5"/></svg><span>Thay thế văn bản</span></button>
+            <button class="nav" data-page="tool-dedupe"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Lọc dòng trùng</span></button>
+            <button class="nav" data-page="tool-authen-merge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="5"/><path d="m12 12 9 9m-5-5 3-3m-1 5 3-3"/></svg><span>Ghép Authen</span></button>
+            <button class="nav" data-page="tool-join"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v4c0 4 6 3 6 7v7m6-18v4c0 4-6 3-6 7m-4 3 4 4 4-4"/></svg><span>Ghép nhiều cột</span></button>
+            <button class="nav" data-page="tool-skin-file"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span>Tạo file Account Skin</span></button>
+            <button class="nav" data-page="tool-missing"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></svg><span>Tìm tài khoản thiếu</span></button>
+            <button class="nav" data-page="tool-outlook"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></svg><span>Đọc thư Microsoft</span></button>
+            <button class="nav" data-page="tool-mail-code"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></svg><span>Tìm mã trong email</span></button>
+            <div class="navhead">HỆ THỐNG</div><button class="nav" id="themeBtn"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1 1m12 12 1 1M5 19l1-1M18 6l1-1"/></svg><span>Giao diện sáng / tối</span></button>
+        </aside>
+        <main class="main">
+            <header class="topbar">
+                <div style="display:flex;gap:12px;align-items:center"><button class="btn mobile-menu"
+                        id="mobileMenu" type="button" aria-label="Mở menu" aria-controls="sidebar" aria-expanded="false">☰</button>
+                    <div>
+                        <h1>Không gian dữ liệu</h1>
+                        <p id="crumb">Tổng quan tài khoản</p>
+                    </div>
+                </div>
+                <div class="top-actions"><span class="cloud-status" id="cloudStatus" role="status">Sẵn sàng</span><span class="user-pill" id="userEmail"></span><button class="btn" id="logoutBtn">Đăng xuất</button><button class="btn" id="topTheme" aria-label="Đổi giao diện sáng tối"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1 1m12 12 1 1M5 19l1-1M18 6l1-1"/></svg></button><button class="btn"
+                        id="helpBtn"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 0 1 6 0c0 2-3 2-3 4m0 3v1"/></svg><span>Hướng dẫn</span></button></div>
+            </header>
+            <div class="content">
+                <section id="page-dashboard" class="page">
+                    <div class="workspace-intro"><div><div class="eyebrow"><span></span> GARENA FILTER PRO / 04</div><h2>Dữ liệu gọn gàng.<br class="mobile-break"> Công việc nhẹ hơn.</h2><p>Nhập, lọc và sắp xếp tài khoản trong một không gian làm việc.</p></div><div class="workspace-seal"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6zM8 12l3 3 5-6"/></svg><div><strong>Bạn kiểm soát dữ liệu</strong><span>Xử lý trực tiếp trong trình duyệt</span></div></div></div>
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="7" r="4"/><path d="M2 21v-3a7 7 0 0 1 14 0v3M16 3a4 4 0 0 1 0 8m3 10v-3a7 7 0 0 0-2-5"/></svg></div>
+                            <div><label>TỔNG TÀI KHOẢN</label><strong id="statTotal">0</strong><small>Tổng dữ liệu hiện
+                                    có</small></div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6zM8 12l3 3 5-6"/></svg></div>
+                            <div><label>ACC FULL</label><strong id="statFull">0</strong><small>Phân loại theo dữ
+                                    liệu</small></div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></svg></div>
+                            <div><label>DÍNH MAIL</label><strong id="statMail">0</strong><small>Tài khoản có
+                                    mail</small></div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 18h4"/></svg></div>
+                            <div><label>DÍNH SỐ</label><strong id="statPhone">0</strong><small>Tài khoản có số</small>
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="5"/><path d="m12 12 9 9m-5-5 3-3m-1 5 3-3"/></svg></div>
+                            <div><label>TRẮNG LỖI PASS</label><strong id="statBlankPass">0</strong><small>Tài khoản lỗi mật khẩu</small></div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M9 12h6"/></svg></div>
+                            <div><label>ACC TRẮNG</label><strong id="statBlank">0</strong><small>Tài khoản trắng</small></div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title fold-heading"><span class="section-step">01</span> <span>Nhập tệp &amp; lọc nhanh</span><button type="button" class="btn" id="toggleQuickImport" aria-expanded="true">Ẩn</button></div>
+                        <div id="quickImportContent"><div class="row">
+                            <div class="field" style="max-width:260px"><label for="importFile">Nhập TXT / CSV / JSON</label><input
+                                    type="file" id="importFile" accept=".txt,.csv,.tsv,.json"></div>
+                            <div class="field"><label for="searchBox">Tìm kiếm</label><input id="searchBox"
+                                    placeholder="TK / MK / UID / NAME..."></div>
+                            <div class="field" style="max-width:110px"><label for="minLv">LV từ</label><input id="minLv"
+                                    type="number" min="0" value="0"></div>
+                            <div class="field" style="max-width:110px"><label for="maxLv">đến</label><input id="maxLv" type="number"
+                                    min="0" value="100"></div>
+                            <div class="field" style="max-width:180px"><label for="statusFilter">Trạng thái</label><select
+                                    id="statusFilter">
+                                    <option value="all">Tất cả</option>
+                                    <option value="full">ACC FULL</option>
+                                    <option value="blankpass">ACC TRẮNG LỖI PASS</option>
+                                    <option value="blank">ACC TRẮNG</option>
+                                    <option value="mail">ACC DÍNH MAIL</option>
+                                    <option value="phone">ACC DÍNH SỐ</option>
+                                    <option value="skin">Có skin</option>
+                                    <option value="none">Không có skin</option>
+                                </select></div><button class="btn primary" id="applyFilter">Lọc</button><button
+                                class="btn" id="clearFilter">Xóa lọc</button>
+                        </div>
+                        <div class="notice">Hỗ trợ <b>TK|MK|Tên|LV</b>, định dạng cột đầy đủ và dữ liệu có nhãn. Dán dữ liệu bên dưới hoặc chọn tệp để bắt đầu.</div></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title fold-heading"><span class="section-step">02</span> <span>Xử lý dữ liệu</span> <button type="button" class="btn" id="togglePasteProcess" aria-expanded="true">Ẩn</button><label class="checks"><input type="checkbox"
+                                    id="autoSave" checked> Tự động lưu</label></div>
+                        <div id="pasteProcessContent"><div class="import-options"><div class="field"><label for="importMode">Cách nhập dữ liệu</label><select id="importMode"><option value="replace">Thay thế bảng hiện tại</option><option value="append">Thêm vào bảng hiện tại</option></select></div><label class="option-check"><input type="checkbox" id="importDedupe" checked> Loại các dòng giống hệt nhau</label><button type="button" class="btn" id="demoBtn">Thử dữ liệu mẫu</button></div><div class="toolbar"><button class="btn primary" id="processBtn">Xử lý dữ liệu</button><button
+                                class="btn green" id="selectAll">☑ Chọn tất cả</button><button class="btn orange"
+                                id="deselectAll">× Bỏ chọn</button><button class="btn purple" id="copySelected">Sao chép đã chọn</button><button class="btn red" id="deleteSelected">▤ Xóa đã
+                                chọn</button><button class="btn green" id="exportBtn">⇩ Xuất CSV</button></div>
+                        <div class="divider"></div>
+                        <div class="field"><div class="editor-heading"><label>Dán dữ liệu tài khoản vào đây</label><span class="dedupe-badge">TXT · CSV · TSV</span></div><textarea id="rawData" spellcheck="false"
+                                placeholder="Ví dụ: tài_khoản|mật_khẩu|tên|level"></textarea>
+                            <div class="dedupe-hint" id="rawDedupeInfo" role="status" aria-live="polite">Sẵn sàng. Dữ liệu sẽ được kiểm tra khi nhập vào bảng.</div>
+                        </div>
+                        <div class="toolbar" style="margin-top:10px"><button class="btn" data-format="tk">Chỉ tài khoản</button><button class="btn" data-format="tkmk">TK | MK</button><button class="btn"
+                                data-format="tkmkname">TK | MK | Tên</button><button class="btn"
+                                data-format="full">Sao chép đầy đủ</button><button class="btn" id="clearData">Xóa ô
+                                nhập</button><span class="small push" id="parseStatus">Chưa xử lý dữ liệu</span></div></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title account-list-head"><span class="section-step">03</span> <span>Danh sách tài khoản</span> <span class="small" id="countLabel">Hiển thị 0 /
+                                Tổng 0</span><span class="privacy-actions">
+<button type="button" class="btn" id="togglePassword" aria-pressed="false">◉ Hiện mật khẩu</button>
+<button type="button" class="btn" id="toggleAccountList" aria-expanded="true">Ẩn danh sách</button></span></div>
+                        <div id="accountListContent"><div class="table-context"><p id="filterSummary" role="status">Đang hiển thị tất cả dữ liệu.</p><span id="selectionCount">0 đã chọn</span><button type="button" class="btn" id="undoBtn" disabled>↶ Hoàn tác</button></div><div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th><input id="headerCheck" type="checkbox" aria-label="Chọn tất cả"></th>
+                                        <th>TK</th>
+                                        <th>MK</th>
+                                        <th>UID</th>
+                                        <th>TÊN</th>
+                                        <th>LV</th>
+                                        <th>SKIN</th>
+                                        <th>SS</th>
+                                        <th>SSS</th>
+                                        <th>SKIN HIẾM</th>
+                                        <th>MYSTIC</th>
+                                        <th>MAIL</th>
+                                        <th>SỐ ĐT</th>
+                                        <th>TRẠNG THÁI</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="accountRows">
+                                    <tr>
+                                        <td colspan="15" class="empty">Chưa có dữ liệu. Dán dữ liệu vào ô phía trên hoặc
+                                            import file.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pagination"><span id="pageInfo">0 tài khoản</span><label class="small">Mỗi trang
+                                <select id="pageSize" class="control"
+                                    style="width:75px;padding:5px;display:inline-block">
+                                    <option>10</option>
+                                    <option>25</option>
+                                    <option>50</option>
+                                    <option>100</option>
+                                </select></label><button class="btn" id="prevPage" aria-label="Trang trước">‹</button><strong
+                                id="pageNumber">1</strong><button class="btn" id="nextPage" aria-label="Trang tiếp theo">›</button></div>
+                        </div></div>
+                    <div class="panel">
+                        <div class="panel-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span>Bộ dữ liệu &amp; sao lưu</span></div>
+                        <div class="row">
+                            <div class="field" style="max-width:280px"><label for="setName">Tên bộ dữ liệu</label><input id="setName"
+                                    placeholder="Nhập tên bộ dữ liệu..."></div><button class="btn primary"
+                                id="saveSetBtn">▣ Lưu bộ dữ liệu</button><button class="btn purple" id="backupBtn">⇧
+                                Sao lưu JSON</button>
+                            <div class="field" style="max-width:260px"><label for="restoreFile">Khôi phục JSON</label><input type="file"
+                                    id="restoreFile" accept=".json,application/json"></div><button class="btn"
+                                id="restoreBtn">↻ Khôi phục</button>
+                            <div class="field" style="max-width:220px"><label for="savedSets">Bộ đã lưu</label><select id="savedSets">
+                                    <option value="">Chọn bộ dữ liệu</option>
+                                </select></div><button class="btn" id="loadSetBtn">Mở bộ</button>
+                        </div>
+                    </div>
+                </section>
+                <section id="page-parser" class="page hidden">
+                    <div class="panel">
+                        <div class="panel-title">Phân tích dữ liệu</div>
+                        <p class="small">Chuyển dữ liệu văn bản thành bảng. Tự nhận diện dấu phân cách | , ; hoặc tab.
+                        </p>
+                        <div class="field"><div class="editor-heading"><label>Dữ liệu đầu vào</label><span class="dedupe-badge">Tự nhận diện dấu phân cách</span></div><textarea id="parserInput" spellcheck="false"
+                                style="min-height:220px" placeholder="TK|MK|Tên|LV"></textarea><div class="dedupe-hint" id="parserDedupeInfo" role="status" aria-live="polite">Dữ liệu được đọc theo cấu hình nhập ở trang Tổng quan.</div></div>
+                        <div class="row" style="margin-top:12px">
+                            <div class="field" style="max-width:200px"><label for="delimiter">Dấu phân cách</label><select
+                                    id="delimiter">
+                                    <option value="auto">Tự nhận diện</option>
+                                    <option value="|">Dấu |</option>
+                                    <option value=",">Dấu phẩy ,</option>
+                                    <option value=";">Dấu chấm phẩy ;</option>
+                                    <option value="tab">Tab</option>
+                                </select></div><button class="btn primary" id="parseBtn">Phân tích & đưa vào
+                                bảng</button><button class="btn" id="parserToRaw">Chuyển sang ô nhập chính</button>
+                        </div>
+                        <div class="notice">Các dòng không rỗng được đọc thành một tài khoản. Các cột thiếu sẽ để trống.
+                        </div>
+                    </div>
+                </section>
+                <section id="page-filter" class="page hidden">
+                    <div class="panel">
+                        <div class="panel-title">⌕ Bộ lọc nâng cao</div>
+                        <div class="feature-grid">
+                            <div class="field"><label for="advSearch">Từ khóa (TK / MK / UID / tên)</label><input id="advSearch"
+                                    placeholder="Nhập từ khóa"></div>
+                            <div class="field"><label for="advStatus">Trạng thái</label><select id="advStatus">
+                                    <option value="all">Tất cả</option>
+                                    <option value="full">ACC FULL</option>
+                                    <option value="blankpass">ACC TRẮNG LỖI PASS</option>
+                                    <option value="blank">ACC TRẮNG</option>
+                                    <option value="mail">Có mail</option>
+                                    <option value="phone">Có số</option>
+                                    <option value="none">Không có skin</option>
+                                </select></div>
+                            <div class="field"><label for="advMin">Level tối thiểu</label><input id="advMin" type="number" value="0"
+                                    min="0"></div>
+                            <div class="field"><label for="advMax">Level tối đa</label><input id="advMax" type="number" value="100"
+                                    min="0"></div>
+                            <div class="field"><label for="advSkin">Skin tối thiểu</label><input id="advSkin" type="number" value="0"
+                                    min="0"></div>
+                            <div class="field"><label for="sortBy">Sắp xếp</label><select id="sortBy">
+                                    <option value="original">Mặc định</option>
+                                    <option value="lv">Level tăng dần</option>
+                                    <option value="lvdesc">Level giảm dần</option>
+                                    <option value="skin">Skin tăng dần</option>
+                                    <option value="skindesc">Skin giảm dần</option>
+                                    <option value="name">Tên A–Z</option>
+                                </select></div>
+                        </div>
+                        <div class="toolbar" style="margin-top:14px"><button class="btn primary" id="advancedApply">Áp
+                                dụng bộ lọc</button><button class="btn" id="advancedReset">Đặt lại</button><button
+                                class="btn green" id="advancedExport">Xuất kết quả lọc</button></div>
+                    </div>
+                </section>
+                <section id="page-saves" class="page hidden">
+                    <div class="panel">
+                        <div class="panel-title">▣ Bộ dữ liệu đã lưu</div>
+                        <div class="row">
+                            <div class="field"><label for="saveName2">Tên bộ dữ liệu mới</label><input id="saveName2"
+                                    placeholder="Ví dụ: Acc tháng 10"></div><button class="btn primary"
+                                id="saveSetBtn2">Lưu dữ liệu hiện tại</button>
+                        </div>
+                        <div class="divider"></div>
+                        <div id="setsList" class="small">Chưa có bộ dữ liệu nào.</div>
+                    </div>
+                </section>
+                <section id="page-settings" class="page hidden">
+                    <div class="panel">
+                        <div class="panel-title">⚙ Cài đặt tài khoản</div>
+                        <p class="small">Chọn chức năng bạn muốn mở. Mỗi mục sẽ hiển thị riêng để dễ thao tác, không cần cuộn qua tất cả cài đặt.</p>
+                        <div class="settings-launcher" role="navigation" aria-label="Các mục cài đặt">
+                            <button type="button" class="settings-tile active" data-settings-pane="general"><span class="settings-icon">⚙️</span><span><b>Cài đặt chung</b><small>Giao diện, tự lưu, sao lưu</small></span><span class="settings-arrow">›</span></button>
+                            <button type="button" class="settings-tile" data-settings-pane="account"><span class="settings-icon">👤</span><span><b>Thông tin đăng nhập</b><small>Email và ID tài khoản</small></span><span class="settings-arrow">›</span></button>
+                            <button type="button" class="settings-tile" data-settings-pane="password"><span class="settings-icon">🔐</span><span><b>Đổi mật khẩu</b><small>Cập nhật mật khẩu Supabase</small></span><span class="settings-arrow">›</span></button>
+                            <button type="button" class="settings-tile" data-settings-pane="history"><span class="settings-icon">🕘</span><span><b>Lịch sử đăng nhập</b><small>Lịch sử lưu trên trình duyệt này</small></span><span class="settings-arrow">›</span></button>
+                            <button type="button" class="settings-tile" data-settings-pane="logs"><span class="settings-icon">🌐</span><span><b>Địa chỉ IP / Auth Logs</b><small>Mở nhật ký xác thực Supabase</small></span><span class="settings-arrow">›</span></button>
+                        </div>
+                    </div>
+                    <div class="settings-pane" data-settings-content="general">
+                        <div class="panel"><div class="panel-title">⚙ Cài đặt chung</div>
+                            <div class="checks"><label><input type="checkbox" id="settingsAutoSave" checked> Tự lưu dữ liệu trong trình duyệt</label><label><input type="checkbox" id="settingsDark"> Giao diện tối</label></div>
+                            <div class="divider"></div><h3>Định dạng dữ liệu</h3>
+                            <p class="small">Thứ tự cột cơ bản: TK | MK | UID | NAME | LV | SKIN | SS | SSS | SKIN HIẾM | MYSTIC | MAIL | SỐ ĐT.</p>
+                            <div class="toolbar"><button class="btn purple" id="settingsBackup">Sao lưu JSON</button><button class="btn red" id="wipeBtn">Xóa toàn bộ dữ liệu trong bảng</button></div>
+                            <p class="notice">Dữ liệu được đồng bộ vào Supabase theo tài khoản đăng nhập. Chính sách RLS cần giới hạn mỗi người chỉ đọc/ghi dữ liệu của chính mình.</p>
+                        </div>
+                    </div>
+                    <div class="settings-pane hidden" data-settings-content="account">
+                        <div class="panel"><div class="panel-title">👤 Thông tin đăng nhập</div>
+                            <div class="field"><label for="accountEmailReadOnly">Email tài khoản (chỉ xem, không thể đổi tại đây)</label><input id="accountEmailReadOnly" readonly value="Chưa đăng nhập"></div>
+                            <div class="field"><label for="accountUserId">ID người dùng</label><input id="accountUserId" readonly value="—"></div>
+                            <p class="small">Email được quản lý bởi Supabase Auth. Trang này chỉ hiển thị thông tin, không cung cấp chức năng đổi email.</p>
+                        </div>
+                    </div>
+                    <div class="settings-pane hidden" data-settings-content="password">
+                        <div class="panel"><div class="panel-title">🔐 Đổi mật khẩu</div>
+                            <form id="changePasswordForm"><div class="field"><label for="newAccountPassword">Mật khẩu mới</label><input id="newAccountPassword" type="password" minlength="8" autocomplete="new-password" placeholder="Ít nhất 8 ký tự" required></div>
+                            <div class="field"><label for="confirmAccountPassword">Nhập lại mật khẩu mới</label><input id="confirmAccountPassword" type="password" minlength="8" autocomplete="new-password" placeholder="Nhập lại mật khẩu mới" required></div>
+                            <div class="toolbar"><button class="btn primary" id="changePasswordBtn" type="submit">Cập nhật mật khẩu</button></div>
+                            <p class="small">Supabase xử lý việc cập nhật mật khẩu. Không chia sẻ mật khẩu với người khác.</p></form>
+                        </div>
+                    </div>
+                    <div class="settings-pane hidden" data-settings-content="history">
+                        <div class="panel"><div class="panel-title">🕘 Lịch sử đăng nhập</div>
+                            <p class="small">Lịch sử thiết bị/trình duyệt lưu cục bộ trên trình duyệt này, không phải nhật ký bảo mật toàn máy chủ.</p>
+                            <div id="loginHistoryList" class="small">Chưa có lịch sử đăng nhập trên trình duyệt này.</div>
+                            <div class="toolbar" style="margin-top:12px"><button class="btn" id="refreshLoginHistory" type="button">Làm mới lịch sử</button><button class="btn red" id="clearLoginHistory" type="button">Xóa lịch sử trên máy này</button></div>
+                        </div>
+                    </div>
+                    <div class="settings-pane hidden" data-settings-content="logs">
+                        <div class="panel"><div class="panel-title">🌐 Địa chỉ IP / Auth Logs</div>
+                            <p class="notice">Trang web chạy trong trình duyệt không thể đọc địa chỉ IP công khai hoặc nhật ký IP đáng tin cậy trực tiếp từ Supabase Auth bằng khóa public. Không hiển thị IP giả.</p>
+                            <p class="small">Quản trị viên có thể xem nhật ký xác thực trong Supabase Dashboard → Logs Explorer hoặc Auth Audit Logs. Không đưa service_role key vào HTML.</p>
+                            <div class="toolbar"><a class="btn primary" href="https://supabase.com/dashboard/project/ahungpttecsujkkchggh/logs/explorer" target="_blank" rel="noopener">Mở Supabase Logs</a></div>
+                        </div>
+                    </div>
+                </section>
+                <section id="page-copy" class="page hidden">
+                    <div class="panel">
+                        <div class="panel-title">▤ Copy Format</div>
+                        <p class="small">Chọn tài khoản trong bảng Dashboard trước. Nếu chưa chọn tài khoản nào, hệ thống sẽ sao chép các dòng đang hiển thị.</p>
+                        <div class="toolbar"><button class="btn primary" id="copyPageTk">Copy TK</button><button class="btn" id="copyPageTkMk">TK | MK</button><button class="btn" id="copyPageTkMkName">TK | MK | Tên</button><button class="btn purple" id="copyPageFull">Sao chép đầy đủ</button></div>
+                        <div class="notice">Định dạng sao chép được tạo từ dữ liệu hiện có trong bảng.</div>
+                    </div>
+                </section>
+                <section id="page-export" class="page hidden">
+                    <div class="panel">
+                        <div class="panel-title">⇩ Export CSV</div>
+                        <p class="small">Xuất dữ liệu tài khoản thành tệp CSV để mở bằng Excel hoặc phần mềm bảng tính.</p>
+                        <div class="toolbar"><button class="btn primary" id="exportPageAll">Xuất tất cả tài khoản</button><button class="btn green" id="exportPageVisible">Xuất kết quả đang lọc</button></div>
+                        <div class="notice">CSV chứa 12 cột dữ liệu cùng STATUS và EXTRA. Các ô bắt đầu bằng ký tự công thức được thêm dấu nháy đơn để mở trong bảng tính. Dùng sao lưu JSON nếu cần giữ nguyên tuyệt đối mọi ký tự.</div>
+                    </div>
+                </section>
+                <section class="page hidden" id="page-tool-2fa">
+<div class="panel"><div class="panel-title">🛡 Garena &amp; 2FA Google</div>
+<p class="small">Tạo mã TOTP 6 số từ secret key của bạn ngay trong trình duyệt. Không gửi secret key lên máy chủ. Chỉ dùng với tài khoản bạn sở hữu.</p>
+<div class="field"><label for="totpSecret">Secret key</label><input autocomplete="off" id="totpSecret" placeholder="Ví dụ: JBSWY3DPEHPK3PXP"/></div>
+<div class="toolbar" style="margin-top:12px"><button class="btn primary" id="totpGenerate">Tạo mã OTP</button><button class="btn" id="totpClear">Xóa</button></div>
+<div class="notice" style="margin-top:12px">Mã OTP: <strong id="totpCode" style="font-size:24px;letter-spacing:5px">------</strong> <span id="totpTimer"></span></div><p class="small" id="totpStatus"></p>
+</div>
+</section>
+<section class="page hidden" id="page-tool-sequence"><div class="panel tool-panel">
+ <div class="tool-heading"><span class="tool-tag">CÔNG CỤ · Tạo tài khoản tăng dần</span><h2>Tạo tài khoản tăng dần</h2><p>Tạo danh sách tên có số thứ tự, có thể ghép thêm mật khẩu chung. Ví dụ: authen1, authen2, authen3.</p></div>
+ <div class="tool-grid"><div class="field"><label for="seqBase">Tên tài khoản gốc</label><input id="seqBase" placeholder="Ví dụ: authen" autocomplete="off"></div><div class="field"><label for="seqPassword">Mật khẩu (không bắt buộc)</label><input id="seqPassword" type="password" placeholder="Mật khẩu áp dụng cho các dòng" autocomplete="off"></div><div class="field"><label for="seqStart">Số bắt đầu</label><input id="seqStart" type="number" min="0" max="100000000" value="1"></div><div class="field"><label for="seqEnd">Số kết thúc</label><input id="seqEnd" type="number" min="0" max="100000000" value="100"></div><div class="field"><label for="seqFormat">Định dạng xuất</label><select id="seqFormat"><option value="name">Chỉ tên tài khoản</option><option value="both">Tài khoản|Mật khẩu</option></select></div></div><p class="tool-note">Giới hạn tối đa 20.000 dòng trong mỗi lần tạo để tránh treo trình duyệt.</p><div class="toolbar tool-actions"><button type="button" class="btn primary" id="seqRun">Tạo danh sách</button><button type="button" class="btn" data-tool-copy="seqOutput">Sao chép kết quả</button><button type="button" class="btn" data-tool-download="seqOutput">Tải TXT</button></div><p class="small" id="seqCount"></p><div class="field"><label for="seqOutput">Kết quả</label><textarea id="seqOutput" readonly placeholder="Kết quả sẽ xuất hiện tại đây..."></textarea></div>
+ </div></section>
+<section class="page hidden" id="page-tool-chain"><div class="panel tool-panel">
+ <div class="tool-heading"><span class="tool-tag">CÔNG CỤ · Thêm tiền tố / hậu tố</span><h2>Thêm tiền tố / hậu tố</h2><p>Thêm chữ hoặc ký tự vào đầu/cuối từng dòng, giữ nguyên nội dung gốc.</p></div>
+ <div class="field"><label for="chainInput">Dữ liệu đầu vào</label><textarea id="chainInput" placeholder="Mỗi dòng một chuỗi"></textarea></div><div class="tool-grid"><div class="field"><label for="chainPrefix">Tiền tố</label><input id="chainPrefix" placeholder="Thêm vào đầu"></div><div class="field"><label for="chainSuffix">Hậu tố</label><input id="chainSuffix" placeholder="Thêm vào cuối"></div></div><div class="toolbar tool-actions"><button type="button" class="btn primary" id="chainRun">Tạo chuỗi</button><button type="button" class="btn" data-tool-copy="chainOutput">Sao chép kết quả</button><button type="button" class="btn" data-tool-download="chainOutput">Tải TXT</button></div><div class="field"><label for="chainOutput">Kết quả</label><textarea id="chainOutput" readonly placeholder="Kết quả sẽ xuất hiện tại đây..."></textarea></div>
+ </div></section>
+<section class="page hidden" id="page-tool-sort"><div class="panel tool-panel">
+ <div class="tool-heading"><span class="tool-tag">CÔNG CỤ · Sắp xếp tài khoản theo số</span><h2>Sắp xếp tài khoản theo số</h2><p>Trích số xuất hiện trong username (trường đầu tiên), xếp tăng/giảm; hỗ trợ sắp xếp theo chữ hoặc trạng thái.</p></div>
+ <div class="field"><label for="sortInput">Danh sách đầu vào</label><textarea id="sortInput" placeholder="acc10|pass
+acc2|pass
+acc1|pass"></textarea></div><div class="tool-grid"><div class="field"><label for="sortModeTool">Chọn kiểu sắp xếp</label><select id="sortModeTool"><option value="num-asc">Số trong username: tăng dần (1, 2, 10)</option><option value="num-desc">Số trong username: giảm dần (10, 2, 1)</option><option value="asc">Theo chữ: A → Z</option><option value="desc">Theo chữ: Z → A</option><option value="status">Ưu tiên trường có Status</option></select></div><div class="field"><label for="sortFile">Nhập file TXT</label><input id="sortFile" type="file" accept=".txt,text/plain" data-tool-file="sortInput"></div></div><div class="toolbar tool-actions"><button type="button" class="btn primary" id="sortRun">Sắp xếp</button><button type="button" class="btn" data-tool-copy="sortOutput">Sao chép kết quả</button><button type="button" class="btn" data-tool-download="sortOutput">Tải TXT</button></div><p class="small" id="sortCount"></p><div class="field"><label for="sortOutput">Kết quả</label><textarea id="sortOutput" readonly placeholder="Kết quả sẽ xuất hiện tại đây..."></textarea></div>
+ </div></section>
+<section class="page hidden" id="page-tool-split"><div class="panel tool-panel">
+ <div class="tool-heading"><span class="tool-tag">CÔNG CỤ · Tách chuỗi thành nhiều cột</span><h2>Tách chuỗi thành nhiều cột</h2><p>Tách từng dòng theo ký tự phân cách và lấy riêng cột mong muốn. Có thể sao chép từng cột.</p></div>
+ <div class="tool-grid"><div class="field"><label for="splitDelimiter">Ký tự phân cách</label><input id="splitDelimiter" value="|" placeholder="|"></div><div class="field"><label for="splitMode">Chọn cách xuất</label><select id="splitMode"><option value="columns">Tách theo từng cột</option><option value="lines">Gộp toàn bộ thành một danh sách</option><option value="number">Chỉ xuất cột số...</option></select></div><div class="field"><label for="splitColumn">Cột muốn lấy (đếm từ 1)</label><input id="splitColumn" type="number" min="1" value="1"></div></div><div class="field"><label for="splitInput">Dữ liệu gốc</label><textarea id="splitInput" placeholder="tk1|mk1|Tên 1
+tk2|mk2|Tên 2"></textarea></div><div class="tool-stats" id="splitStats">0 dòng · 0 cột</div><div class="toolbar tool-actions"><button type="button" class="btn primary" id="splitRun">Tách dữ liệu</button><button type="button" class="btn" data-tool-copy="splitOutput">Sao chép kết quả</button><button type="button" class="btn" data-tool-download="splitOutput">Tải TXT</button></div><div id="splitColumns" class="split-columns"></div><div class="field"><label for="splitOutput">Kết quả</label><textarea id="splitOutput" readonly placeholder="Kết quả sẽ xuất hiện tại đây..."></textarea></div>
+ </div></section>
+<section class="page hidden" id="page-tool-replace"><div class="panel tool-panel">
+ <div class="tool-heading"><span class="tool-tag">CÔNG CỤ · Thay thế văn bản</span><h2>Thay thế văn bản</h2><p>Hỗ trợ tìm/thay trên nhiều dòng, có thể thay nhiều cặp cùng lúc với hai ô nhiều dòng.</p></div>
+ <div class="field"><label for="replaceInput">Văn bản đầu vào</label><textarea id="replaceInput" placeholder="Dán nội dung cần thay..."></textarea></div><div class="tool-grid"><div class="field"><label for="replaceFind">Chuỗi cần thay (mỗi dòng một chuỗi)</label><textarea class="short-textarea" id="replaceFind" placeholder="chuỗi cũ 1
+chuỗi cũ 2"></textarea></div><div class="field"><label for="replaceWith">Chuỗi thay thế (tương ứng từng dòng)</label><textarea class="short-textarea" id="replaceWith" placeholder="chuỗi mới 1
+chuỗi mới 2"></textarea></div></div><div class="tool-options"><label><input type="checkbox" id="replaceAll" checked> Thay tất cả lần xuất hiện</label><label><input type="checkbox" id="replaceCase" checked> Phân biệt hoa / thường</label></div><div class="toolbar tool-actions"><button type="button" class="btn primary" id="replaceRun">Thay thế</button><button type="button" class="btn" data-tool-copy="replaceOutput">Sao chép kết quả</button><button type="button" class="btn" data-tool-download="replaceOutput">Tải TXT</button></div><p class="small" id="replaceCount"></p><div class="field"><label for="replaceOutput">Kết quả</label><textarea id="replaceOutput" readonly placeholder="Kết quả sẽ xuất hiện tại đây..."></textarea></div>
+ </div></section>
+<section class="page hidden" id="page-tool-dedupe"><div class="panel tool-panel">
+ <div class="tool-heading"><span class="tool-tag">CÔNG CỤ · Lọc trùng dòng &amp; thay ký tự</span><h2>Lọc trùng dòng &amp; thay ký tự</h2><p>Lọc theo cả dòng hoặc theo một cột được chọn. Giữ lại dòng đầu tiên cho mỗi giá trị trùng.</p></div>
+ <div class="field"><label for="dedupeInput">Văn bản đầu vào</label><textarea id="dedupeInput" placeholder="tk1|mk1
+tk2|mk2
+tk1|mk3"></textarea></div><div class="tool-grid"><div class="field"><label for="dedupeMode">Chế độ lọc</label><select id="dedupeMode"><option value="full">Theo toàn bộ dòng</option><option value="column">Theo giá trị cột</option></select></div><div class="field"><label for="dedupeDelimiter">Ký tự phân cột</label><input id="dedupeDelimiter" value="|"></div><div class="field"><label for="dedupeColumn">Cột so sánh (đếm từ 1)</label><input id="dedupeColumn" type="number" min="1" value="1"></div><div class="field"><label for="dedupeFind">Thay ký tự (không bắt buộc)</label><input id="dedupeFind" placeholder="Ví dụ: ;"></div><div class="field"><label for="dedupeReplace">Bằng ký tự</label><input id="dedupeReplace" placeholder="Ví dụ: |"></div></div><div class="tool-options"><label><input type="checkbox" id="dedupeCase"> Phân biệt chữ hoa/chữ thường</label><label><input type="checkbox" id="dedupeTrim" checked> Bỏ khoảng trắng hai đầu khi so sánh</label></div><div class="toolbar tool-actions"><button type="button" class="btn primary" id="dedupeRun">Lọc trùng</button><button type="button" class="btn" data-tool-copy="dedupeOutput">Sao chép kết quả</button><button type="button" class="btn" data-tool-download="dedupeOutput">Tải TXT</button></div><div class="tool-stats" id="dedupeCount"></div><div class="field"><label for="dedupeOutput">Kết quả</label><textarea id="dedupeOutput" readonly placeholder="Kết quả sẽ xuất hiện tại đây..."></textarea></div>
+ </div></section>
+<section class="page hidden" id="page-tool-authen-merge"><div class="panel tool-panel">
+ <div class="tool-heading"><span class="tool-tag">CÔNG CỤ · Ghép Authen theo tài khoản</span><h2>Ghép Authen theo tài khoản</h2><p>Ghép dữ liệu của hai danh sách dựa trên username. Các dòng không tìm thấy Authen vẫn được giữ nguyên.</p></div>
+ <div class="field"><label for="authBase">Danh sách tài khoản cần ghép</label><textarea id="authBase" placeholder="user1|pass1|nickname1
+user2|pass2|nickname2"></textarea></div><div class="field"><label for="authSource">Danh sách có Authen</label><textarea id="authSource" placeholder="user1|pass1|SECRET1
+user2|pass2|SECRET2"></textarea></div><div class="tool-grid"><div class="field"><label for="authDelimiter">Dấu phân cách</label><input id="authDelimiter" value="|"></div><div class="field"><label for="authColumn">Cột chứa Authen ở danh sách nguồn</label><select id="authColumn"><option value="last">Cột cuối</option><option value="3">Cột 3</option><option value="4">Cột 4</option><option value="5">Cột 5</option></select></div></div><p class="tool-note">Chỉ xử lý dữ liệu ngay trên thiết bị, không gửi mã Authen lên Supabase. Không nên chia sẻ file có secret 2FA.</p><div class="toolbar tool-actions"><button type="button" class="btn primary" id="authRun">Ghép Authen</button><button type="button" class="btn" data-tool-copy="authOutput">Sao chép kết quả</button><button type="button" class="btn" data-tool-download="authOutput">Tải TXT</button></div><p class="small" id="authCount"></p><div class="field"><label for="authOutput">Kết quả</label><textarea id="authOutput" readonly placeholder="Kết quả sẽ xuất hiện tại đây..."></textarea></div>
+ </div></section>
+<section class="page hidden" id="page-tool-join"><div class="panel tool-panel">
+ <div class="tool-heading"><span class="tool-tag">CÔNG CỤ · Ghép nhiều cột</span><h2>Ghép nhiều cột</h2><p>Ghép dữ liệu của các cột theo từng hàng. Nếu cột chỉ có một giá trị, giá trị đó áp dụng cho tất cả hàng.</p></div>
+ <div id="joinFields" class="join-fields"></div><div class="toolbar" style="margin:12px 0"><button class="btn" id="joinAdd">＋ Thêm cột</button><button class="btn" id="joinRemove">－ Xóa cột cuối</button></div><div class="field"><label for="joinDelimiter">Dấu phân cách kết quả</label><input id="joinDelimiter" value="|"></div><div class="tool-options"><button type="button" class="btn tiny" data-delim="|">Pipe |</button><button type="button" class="btn tiny" data-delim=":">Colon :</button><button type="button" class="btn tiny" data-delim="-">Dash -</button><button type="button" class="btn tiny" data-delim="_">Under _</button><button type="button" class="btn tiny" data-delim=" ">Space</button><button type="button" class="btn tiny" data-delim=",">Comma ,</button></div><div class="toolbar tool-actions"><button type="button" class="btn primary" id="joinRun">Ghép chuỗi</button><button type="button" class="btn" data-tool-copy="joinOutput">Sao chép kết quả</button><button type="button" class="btn" data-tool-download="joinOutput">Tải TXT</button></div><p class="small" id="joinCount"></p><div class="field"><label for="joinOutput">Kết quả</label><textarea id="joinOutput" readonly placeholder="Kết quả sẽ xuất hiện tại đây..."></textarea></div>
+ </div></section>
+<section class="page hidden" id="page-tool-skin-file"><div class="panel tool-panel">
+ <div class="tool-heading"><span class="tool-tag">CÔNG CỤ · Tạo file Account Skin</span><h2>Tạo file Account Skin</h2><p>Chuyển danh sách tài khoản theo định dạng TK|MK|Skin|S|SS|Anime thành file TXT tải về.</p></div>
+ <div class="field"><label for="skinInput">Nhập dữ liệu tài khoản</label><textarea id="skinInput" placeholder="TK|MK|Skin|S|SS|Anime
+user1|pass1|120|10|5|3"></textarea></div><div class="tool-grid"><div class="field"><label for="skinFilename">Tên tệp xuất</label><input id="skinFilename" value="account-skin.txt" placeholder="account-skin.txt"></div><div class="field"><label for="skinMin">Số trường tối thiểu</label><input id="skinMin" type="number" min="2" max="20" value="6"></div></div><div class="tool-options"><label><input type="checkbox" id="skinSkipHeader" checked> Bỏ dòng tiêu đề nếu có</label><label><input type="checkbox" id="skinOnlyValid" checked> Chỉ xuất dòng đủ trường</label></div><div class="toolbar tool-actions"><button type="button" class="btn primary" id="skinRun">Tạo nội dung</button><button type="button" class="btn" data-tool-copy="skinOutput">Sao chép kết quả</button><button type="button" class="btn" data-tool-download="skinOutput">Tải TXT</button><button type="button" class="btn green" id="skinDownload">Tạo và tải xuống</button></div><p class="small" id="skinCount"></p><div class="field"><label for="skinOutput">Kết quả</label><textarea id="skinOutput" readonly placeholder="Kết quả sẽ xuất hiện tại đây..."></textarea></div>
+ </div></section>
+<section class="page hidden" id="page-tool-missing"><div class="panel"><div class="panel-title">⌕ Lọc Account Bị Thiếu</div><p class="small">Kiểm tra dòng nào thiếu trường so với định dạng bạn chọn. Chỉ phân tích văn bản, không kiểm tra trạng thái tài khoản từ máy chủ.</p><div class="field"><label for="missingInput">Dữ liệu đầu vào (mỗi dòng một tài khoản)</label><textarea id="missingInput" placeholder="Ví dụ: tài_khoản|mật_khẩu|tên|level"></textarea></div><div class="row"><div class="field"><label for="missingDelimiter">Ký tự phân tách</label><input id="missingDelimiter" value="|"/></div><div class="field"><label for="missingMin">Số trường tối thiểu</label><input id="missingMin" min="1" type="number" value="4"/></div></div><div class="toolbar" style="margin-top:12px"><button class="btn primary" id="missingRun">Lọc dòng thiếu</button><button class="btn" data-tool-copy="missingOutput">Copy kết quả</button></div><p class="small" id="missingCount"></p><div class="field"><label for="missingOutput">Dòng thiếu trường</label><textarea id="missingOutput" readonly=""></textarea></div></div></section>
+
+<section class="page hidden" id="page-tool-outlook">
+  <div class="panel">
+    <div class="mail-hero"><div><h2 class="mail-heading">📧 Microsoft Mail Reader</h2><div class="mail-caption">Đọc thư của tài khoản Outlook / Hotmail / Live bằng Microsoft Graph. Đăng nhập tại Microsoft; web không yêu cầu hoặc lưu mật khẩu email.</div></div><span class="mail-pill" id="msMailStatus">Chưa kết nối</span></div>
+    <div class="mail-guide"><b>⚙ Thiết lập một lần</b><div>1. Đăng ký ứng dụng tại <a href="https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade" target="_blank" rel="noopener noreferrer">Microsoft Entra → App registrations</a>, chọn loại tài khoản có hỗ trợ <b>Personal Microsoft accounts</b>.</div><div>2. Thêm nền tảng <b>Single-page application (SPA)</b> và Redirect URI chính xác như bên dưới.</div><div>3. Thêm quyền Microsoft Graph <b>Delegated → Mail.Read</b>; nhập <b>Application (client) ID</b> rồi đăng nhập.</div><div>Không dùng Client secret hay mật khẩu email trong HTML. Phải mở web qua HTTPS (ví dụ Netlify), không mở trực tiếp dạng file://.</div></div>
+    <div class="field"><label>Redirect URI cần khai báo trong Microsoft Entra</label><div class="row"><input id="msRedirectUri" readonly style="flex:1;min-width:200px" aria-label="Redirect URI"><button class="btn" id="msCopyRedirect">Copy URI</button></div></div>
+    <div class="field" style="margin-top:12px"><label for="msClientId">Application (client) ID</label><input id="msClientId" spellcheck="false" autocomplete="off" placeholder="Ví dụ: 00000000-0000-0000-0000-000000000000"><div class="mail-muted">Chỉ lưu Client ID công khai trong bộ nhớ trình duyệt này, không đồng bộ Supabase.</div></div>
+    <div class="mail-actions"><button class="btn primary" id="msConnect">Đăng nhập Microsoft</button><button class="btn" id="msRefresh">↻ Tải thư</button><button class="btn" id="msSignOut">Ngắt kết nối</button></div>
+    <p class="small" id="msMailNotice" role="status">Để sử dụng, hãy cấu hình Client ID trước.</p>
+    <div class="row" style="margin-top:14px"><div class="field" style="flex:1;min-width:200px"><label for="msMailSearch">Tìm tiêu đề / người gửi (trong các thư đã tải)</label><input id="msMailSearch" placeholder="Ví dụ: Microsoft, xác minh..."/></div><div class="field" style="max-width:155px"><label for="msMailCount">Số thư tải</label><select id="msMailCount"><option value="20">20</option><option value="50" selected>50</option><option value="100">100</option></select></div></div>
+    <div class="mail-grid"><div class="mail-list" id="msMailList"><div class="mail-empty">Chưa tải thư.</div></div><div class="mail-detail" id="msMailDetail"><div class="mail-empty">Chọn một email để xem nội dung dạng văn bản an toàn.</div></div></div>
+    <div class="mail-actions"><button class="btn" id="msMoreMail">Tải thêm thư</button><button class="btn" id="msOpenOtp">🔎 Mở công cụ tìm mã</button></div>
+    <div class="mail-muted" style="margin-top:12px">Thư chỉ hiển thị trên máy đang dùng, không được ghi vào danh sách tài khoản hoặc Save Set của Garena. Không tự động chuyển tiếp email hoặc gửi mã tới máy chủ khác.</div>
+  </div>
+</section>
+<section class="page hidden" id="page-tool-mail-code">
+  <div class="panel">
+    <div class="mail-hero"><div><h2 class="mail-heading">🔎 Tìm mã xác minh trong thư</h2><div class="mail-caption">Tìm nhanh email có nội dung xác minh trong những thư được tải từ Microsoft Graph. Chỉ hoạt động với tài khoản Microsoft đã tự đăng nhập và cấp quyền.</div></div><span id="msOtpStatus" class="mail-pill">Chưa kết nối</span></div>
+    <div class="mail-actions"><button class="btn primary" id="msOtpConnect">Đăng nhập / Kết nối</button><button class="btn" id="msOtpRefresh">↻ Tải thư mới</button><button class="btn" id="msOtpConfig">⚙ Cài đặt Microsoft</button></div>
+    <div class="row" style="margin-top:15px"><div class="field" style="flex:1;min-width:200px"><label for="msOtpSearch">Lọc theo người gửi hoặc từ khóa</label><input id="msOtpSearch" placeholder="Ví dụ: Microsoft, verification, mã..."/></div><div class="field" style="max-width:200px"><label for="msOtpTime">Khoảng thời gian</label><select id="msOtpTime"><option value="1">24 giờ qua</option><option value="7" selected>7 ngày</option><option value="30">30 ngày</option><option value="0">Tất cả thư đã tải</option></select></div></div>
+    <p class="small" id="msOtpNotice" role="status">Không lấy mã từ các hộp thư khác. Hãy đăng nhập và tải thư của chính mình.</p>
+    <div id="msOtpResults"><div class="mail-empty">Chưa có dữ liệu.</div></div>
+    <div class="mail-muted">Gợi ý mã dựa trên biểu thức nhận dạng số/chữ trong email, có thể nhầm hoặc không tìm thấy. Hãy kiểm tra nội dung thư trước khi sử dụng.</div>
+  </div>
+</section>
+
+                <section id="page-delete" class="page hidden">
+                    <div class="panel">
+                        <div class="panel-title">▤ Xóa tài khoản đã chọn</div>
+                        <p>Xóa các dòng đã chọn khỏi dữ liệu hiện tại. Bạn có thể dùng Hoàn tác ở trang Tổng quan để khôi phục thao tác vừa thực hiện.</p>
+                        <div class="toolbar"><button class="btn" id="deletePageSelectAll">Chọn tất cả tài khoản đang hiển thị</button><button class="btn" id="deletePageDeselect">Bỏ chọn</button><button class="btn red" id="deletePageConfirm">Xóa các tài khoản đã chọn</button></div>
+                        <div class="notice">Đang chọn: <strong id="deletePageCount">0</strong> tài khoản. Hãy kiểm tra lựa chọn trước khi xóa.</div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <dialog id="helpDialog" class="help-dialog" aria-labelledby="helpTitle"><div class="help-heading"><span class="eyebrow">BẮT ĐẦU TRONG MỘT PHÚT</span><button type="button" class="btn" id="closeHelp" aria-label="Đóng hướng dẫn">×</button></div><h2 id="helpTitle">Một quy trình, ba bước.</h2><ol class="help-steps"><li><strong>Nhập dữ liệu</strong><p>Dán văn bản hoặc chọn tệp TXT, CSV, TSV. Chọn thay thế bảng hay thêm dòng mới, rồi nhấn Xử lý dữ liệu.</p></li><li><strong>Lọc và kiểm tra</strong><p>Tìm theo tài khoản, tên hoặc UID. Kết hợp bộ lọc level, trạng thái và skin; chọn những dòng cần xử lý.</p></li><li><strong>Sao chép hoặc xuất tệp</strong><p>Chọn định dạng sao chép, tải CSV hoặc lưu bản sao JSON để giữ đầy đủ dữ liệu.</p></li></ol><div class="help-formats"><strong>Định dạng đầu vào</strong><code>TK|MK|Tên|LV</code><code>TK|MK|UID|NAME|LV|SKIN|SS|SSS|SKIN_HIEM|MYSTIC|MAIL|PHONE</code><p>Cũng hỗ trợ dữ liệu có nhãn như <code>UID: 123 | NAME: Tên | LEVEL: 30</code>.</p></div><div class="notice">Chế độ trên máy lưu trong trình duyệt hiện tại khi bật Tự động lưu. Dùng bản sao JSON để chuyển dữ liệu sang máy khác.</div><p class="small">Phím tắt: <kbd>/</kbd> tìm công cụ · <kbd>Esc</kbd> đóng menu hoặc hướng dẫn.</p></dialog><div class="toast" id="toast" role="status" aria-live="polite"></div><input type="file" id="hiddenRestore" accept=".json,application/json" hidden>
+    <script>/* APP_SCRIPT */</script>
+
+<script>/* MAIL_SCRIPT */</script>
+
+</body>
+
+</html>

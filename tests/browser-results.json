@@ -1,0 +1,67 @@
+{
+  "passed": 11,
+  "failed": 1,
+  "results": [
+    {
+      "name": "Offline startup, every navigation page, help",
+      "status": "PASS",
+      "ms": 11193
+    },
+    {
+      "name": "Plain/labeled import, status-only, UID and invalid records",
+      "status": "PASS",
+      "ms": 6830
+    },
+    {
+      "name": "Quoted CSV multiline, BOM, header mapping, safe export roundtrip",
+      "status": "PASS",
+      "ms": 4274
+    },
+    {
+      "name": "Import deduplication is explicit and append mode preserves data",
+      "status": "PASS",
+      "ms": 5150
+    },
+    {
+      "name": "Advanced skin and no-skin filters persist through rerender and paging",
+      "status": "PASS",
+      "ms": 6576
+    },
+    {
+      "name": "Selection, mixed header state, delete and undo",
+      "status": "PASS",
+      "ms": 7161
+    },
+    {
+      "name": "Named sets, backup restore, malformed backup remains atomic",
+      "status": "PASS",
+      "ms": 7160
+    },
+    {
+      "name": "Local auto save switch and theme survive reload",
+      "status": "FAIL",
+      "error": "page.goto: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8765/\", waiting until \"load\"\u001b[22m\n",
+      "ms": 8516
+    },
+    {
+      "name": "Text tools: sequences, natural sort, split and literal replace",
+      "status": "PASS",
+      "ms": 12409
+    },
+    {
+      "name": "Text tools: dedupe, missing, auth merge, positional join, skin file",
+      "status": "PASS",
+      "ms": 7096
+    },
+    {
+      "name": "TOTP RFC vector, clear and invalid secret",
+      "status": "PASS",
+      "ms": 5910
+    },
+    {
+      "name": "Mobile layout and navigation, light and dark",
+      "status": "PASS",
+      "ms": 6022
+    }
+  ]
+}

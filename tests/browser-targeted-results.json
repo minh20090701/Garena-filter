@@ -1,0 +1,11 @@
+{
+  "passed": 1,
+  "failed": 0,
+  "results": [
+    {
+      "name": "Local auto save switch and theme survive reload",
+      "status": "PASS",
+      "ms": 18564
+    }
+  ]
+}
