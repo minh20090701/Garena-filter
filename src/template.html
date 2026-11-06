@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Garena Filter Pro V4 · Không gian dữ liệu</title>
+    <title>Garena Filter Pro V5 · Không gian dữ liệu</title>
     <meta name="description" content="Nhập, lọc và quản lý dữ liệu tài khoản trong một không gian làm việc gọn gàng. Hỗ trợ TXT, CSV, JSON và các tiện ích xử lý văn bản.">
     <meta name="color-scheme" content="light dark">
     <style>
@@ -799,7 +799,7 @@
   <div class="auth-card">
     <div class="auth-brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M8 8h16l-6 8v8l-4-2v-6z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg></span><span>Garena Filter <b>Pro</b></span></div>
     <div class="auth-sub">Một nơi cho dữ liệu. Mọi thứ trong tầm tay.</div>
-    <div id="authConfig" class="auth-config">Chưa cấu hình Supabase. Hãy mở file HTML, tìm hai biến <b>SUPABASE_URL</b> và <b>SUPABASE_ANON_KEY</b> trong phần JavaScript rồi điền thông tin Project của bạn. Không dùng service_role key ở trình duyệt.</div>
+    <div id="authConfig" class="auth-config">Bản V5 đã sử dụng cấu hình Supabase công khai từ V4. Đăng nhập tài khoản hiện có hoặc chọn Dùng trên máy. Không tải dữ liệu nhạy cảm lên kho mã nguồn.</div>
     <div class="auth-tabs"><button type="button" id="loginTab" class="active">Đăng nhập</button><button type="button" id="signupTab">Đăng ký</button></div>
     <form id="authForm">
       <label class="auth-field" for="authEmail">Email</label><input class="auth-input" id="authEmail" type="email" autocomplete="email" placeholder="Email" required>
@@ -816,7 +816,7 @@
         <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
         <aside class="sidebar" id="sidebar" aria-label="Menu chính">
             <div class="sidebar-mobile-head"><strong>MENU</strong><button type="button" class="sidebar-close" id="sidebarClose" aria-label="Đóng menu">✕</button></div>
-            <div class="brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M8 8h16l-6 8v8l-4-2v-6z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg></span><div>Garena Filter<small>PRO WORKSPACE <span>V4</span></small></div></div>
+            <div class="brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M8 8h16l-6 8v8l-4-2v-6z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg></span><div>Garena Filter<small>PRO WORKSPACE <span>V5</span></small></div></div>
             <div class="nav-search"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></svg><input id="navSearch" type="search" aria-label="Tìm công cụ trong menu" placeholder="Tìm công cụ…" autocomplete="off"><kbd>/</kbd></div>
             <div class="navhead">KHÔNG GIAN LÀM VIỆC</div><button class="nav active"
                 data-page="dashboard"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Tổng quan</span></button><button class="nav" data-page="parser"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V3m-4 4 4-4 4 4M4 15v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg><span>Phân tích dữ liệu</span></button><button class="nav" data-page="filter"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16l-6 7v6l-4 2v-8z"/></svg><span>Bộ lọc nâng cao</span></button><button class="nav"
@@ -844,7 +844,7 @@
                 <div style="display:flex;gap:12px;align-items:center"><button class="btn mobile-menu"
                         id="mobileMenu" type="button" aria-label="Mở menu" aria-controls="sidebar" aria-expanded="false">☰</button>
                     <div>
-                        <h1>Không gian dữ liệu</h1>
+                        <h1>Không gian dữ liệu <span class="v5-tag">V5</span></h1>
                         <p id="crumb">Tổng quan tài khoản</p>
                     </div>
                 </div>
@@ -853,7 +853,7 @@
             </header>
             <div class="content">
                 <section id="page-dashboard" class="page">
-                    <div class="workspace-intro"><div><div class="eyebrow"><span></span> GARENA FILTER PRO / 04</div><h2>Dữ liệu gọn gàng.<br class="mobile-break"> Công việc nhẹ hơn.</h2><p>Nhập, lọc và sắp xếp tài khoản trong một không gian làm việc.</p></div><div class="workspace-seal"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6zM8 12l3 3 5-6"/></svg><div><strong>Bạn kiểm soát dữ liệu</strong><span>Xử lý trực tiếp trong trình duyệt</span></div></div></div>
+                    <div class="workspace-intro"><div><div class="eyebrow"><span></span> GARENA FILTER PRO / 05</div><h2>Dữ liệu gọn gàng.<br class="mobile-break"> Công việc nhẹ hơn.</h2><p>Nhập, lọc và sắp xếp tài khoản trong một không gian làm việc.</p></div><div class="workspace-seal"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6zM8 12l3 3 5-6"/></svg><div><strong>Bạn kiểm soát dữ liệu</strong><span>Xử lý trực tiếp trong trình duyệt</span></div></div></div>
                     <div class="stats">
                         <div class="stat">
                             <div class="stat-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="7" r="4"/><path d="M2 21v-3a7 7 0 0 1 14 0v3M16 3a4 4 0 0 1 0 8m3 10v-3a7 7 0 0 0-2-5"/></svg></div>
@@ -1074,7 +1074,7 @@
                             <div class="divider"></div><h3>Định dạng dữ liệu</h3>
                             <p class="small">Thứ tự cột cơ bản: TK | MK | UID | NAME | LV | SKIN | SS | SSS | SKIN HIẾM | MYSTIC | MAIL | SỐ ĐT.</p>
                             <div class="toolbar"><button class="btn purple" id="settingsBackup">Sao lưu JSON</button><button class="btn red" id="wipeBtn">Xóa toàn bộ dữ liệu trong bảng</button></div>
-                            <p class="notice">Dữ liệu được đồng bộ vào Supabase theo tài khoản đăng nhập. Chính sách RLS cần giới hạn mỗi người chỉ đọc/ghi dữ liệu của chính mình.</p>
+                            <p class="notice">Bản này dùng chung Supabase với V4 trên Netlify và GitHub Pages. Đồng bộ cần đăng nhập và chính sách RLS đúng. Nếu bật tự lưu, thông tin tài khoản (bao gồm mật khẩu nếu nhập) được lưu nguyên văn trong trình duyệt và có thể đồng bộ vào bảng đám mây. Không dùng nơi này để giữ mật khẩu hoặc mã xác thực quan trọng.</p>
                         </div>
                     </div>
                     <div class="settings-pane hidden" data-settings-content="account">
@@ -1103,7 +1103,7 @@
                         <div class="panel"><div class="panel-title">🌐 Địa chỉ IP / Auth Logs</div>
                             <p class="notice">Trang web chạy trong trình duyệt không thể đọc địa chỉ IP công khai hoặc nhật ký IP đáng tin cậy trực tiếp từ Supabase Auth bằng khóa public. Không hiển thị IP giả.</p>
                             <p class="small">Quản trị viên có thể xem nhật ký xác thực trong Supabase Dashboard → Logs Explorer hoặc Auth Audit Logs. Không đưa service_role key vào HTML.</p>
-                            <div class="toolbar"><a class="btn primary" href="https://supabase.com/dashboard/project/ahungpttecsujkkchggh/logs/explorer" target="_blank" rel="noopener">Mở Supabase Logs</a></div>
+                            <div class="toolbar"><a class="btn primary" href="https://supabase.com/dashboard/projects" target="_blank" rel="noopener">Mở Supabase Logs</a></div>
                         </div>
                     </div>
                 </section>
@@ -1182,7 +1182,7 @@ user1|pass1|120|10|5|3"></textarea></div><div class="tool-grid"><div class="fiel
 <section class="page hidden" id="page-tool-outlook">
   <div class="panel">
     <div class="mail-hero"><div><h2 class="mail-heading">📧 Microsoft Mail Reader</h2><div class="mail-caption">Đọc thư của tài khoản Outlook / Hotmail / Live bằng Microsoft Graph. Đăng nhập tại Microsoft; web không yêu cầu hoặc lưu mật khẩu email.</div></div><span class="mail-pill" id="msMailStatus">Chưa kết nối</span></div>
-    <div class="mail-guide"><b>⚙ Thiết lập một lần</b><div>1. Đăng ký ứng dụng tại <a href="https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade" target="_blank" rel="noopener noreferrer">Microsoft Entra → App registrations</a>, chọn loại tài khoản có hỗ trợ <b>Personal Microsoft accounts</b>.</div><div>2. Thêm nền tảng <b>Single-page application (SPA)</b> và Redirect URI chính xác như bên dưới.</div><div>3. Thêm quyền Microsoft Graph <b>Delegated → Mail.Read</b>; nhập <b>Application (client) ID</b> rồi đăng nhập.</div><div>Không dùng Client secret hay mật khẩu email trong HTML. Phải mở web qua HTTPS (ví dụ Netlify), không mở trực tiếp dạng file://.</div></div>
+    <div class="mail-guide"><b>⚙ Thiết lập một lần</b><div>1. Đăng ký ứng dụng tại <a href="https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade" target="_blank" rel="noopener noreferrer">Microsoft Entra → App registrations</a>, chọn loại tài khoản có hỗ trợ <b>Personal Microsoft accounts</b>.</div><div>2. Thêm nền tảng <b>Single-page application (SPA)</b> và Redirect URI chính xác như bên dưới.</div><div>3. Thêm quyền Microsoft Graph <b>Delegated → Mail.Read</b>; nhập <b>Application (client) ID</b> rồi đăng nhập.</div><div>Không dùng Client secret hay mật khẩu email trong HTML. Phải mở web qua HTTPS (ví dụ GitHub Pages), không mở trực tiếp dạng file://.</div></div>
     <div class="field"><label>Redirect URI cần khai báo trong Microsoft Entra</label><div class="row"><input id="msRedirectUri" readonly style="flex:1;min-width:200px" aria-label="Redirect URI"><button class="btn" id="msCopyRedirect">Copy URI</button></div></div>
     <div class="field" style="margin-top:12px"><label for="msClientId">Application (client) ID</label><input id="msClientId" spellcheck="false" autocomplete="off" placeholder="Ví dụ: 00000000-0000-0000-0000-000000000000"><div class="mail-muted">Chỉ lưu Client ID công khai trong bộ nhớ trình duyệt này, không đồng bộ Supabase.</div></div>
     <div class="mail-actions"><button class="btn primary" id="msConnect">Đăng nhập Microsoft</button><button class="btn" id="msRefresh">↻ Tải thư</button><button class="btn" id="msSignOut">Ngắt kết nối</button></div>
@@ -1215,7 +1215,8 @@ user1|pass1|120|10|5|3"></textarea></div><div class="tool-grid"><div class="fiel
             </div>
         </main>
     </div>
-    <dialog id="helpDialog" class="help-dialog" aria-labelledby="helpTitle"><div class="help-heading"><span class="eyebrow">BẮT ĐẦU TRONG MỘT PHÚT</span><button type="button" class="btn" id="closeHelp" aria-label="Đóng hướng dẫn">×</button></div><h2 id="helpTitle">Một quy trình, ba bước.</h2><ol class="help-steps"><li><strong>Nhập dữ liệu</strong><p>Dán văn bản hoặc chọn tệp TXT, CSV, TSV. Chọn thay thế bảng hay thêm dòng mới, rồi nhấn Xử lý dữ liệu.</p></li><li><strong>Lọc và kiểm tra</strong><p>Tìm theo tài khoản, tên hoặc UID. Kết hợp bộ lọc level, trạng thái và skin; chọn những dòng cần xử lý.</p></li><li><strong>Sao chép hoặc xuất tệp</strong><p>Chọn định dạng sao chép, tải CSV hoặc lưu bản sao JSON để giữ đầy đủ dữ liệu.</p></li></ol><div class="help-formats"><strong>Định dạng đầu vào</strong><code>TK|MK|Tên|LV</code><code>TK|MK|UID|NAME|LV|SKIN|SS|SSS|SKIN_HIEM|MYSTIC|MAIL|PHONE</code><p>Cũng hỗ trợ dữ liệu có nhãn như <code>UID: 123 | NAME: Tên | LEVEL: 30</code>.</p></div><div class="notice">Chế độ trên máy lưu trong trình duyệt hiện tại khi bật Tự động lưu. Dùng bản sao JSON để chuyển dữ liệu sang máy khác.</div><p class="small">Phím tắt: <kbd>/</kbd> tìm công cụ · <kbd>Esc</kbd> đóng menu hoặc hướng dẫn.</p></dialog><div class="toast" id="toast" role="status" aria-live="polite"></div><input type="file" id="hiddenRestore" accept=".json,application/json" hidden>
+    <dialog id="helpDialog" class="help-dialog" aria-labelledby="helpTitle"><div class="help-heading"><span class="eyebrow">BẮT ĐẦU TRONG MỘT PHÚT</span><button type="button" class="btn" id="closeHelp" aria-label="Đóng hướng dẫn">×</button></div><h2 id="helpTitle">Một quy trình, ba bước.</h2><ol class="help-steps"><li><strong>Nhập dữ liệu</strong><p>Dán văn bản hoặc chọn tệp TXT, CSV, TSV. Chọn thay thế bảng hay thêm dòng mới, rồi nhấn Xử lý dữ liệu.</p></li><li><strong>Lọc và kiểm tra</strong><p>Tìm theo tài khoản, tên hoặc UID. Kết hợp bộ lọc level, trạng thái và skin; chọn những dòng cần xử lý.</p></li><li><strong>Sao chép hoặc xuất tệp</strong><p>Chọn định dạng sao chép, tải CSV hoặc lưu bản sao JSON để giữ đầy đủ dữ liệu.</p></li></ol><div class="help-formats"><strong>Định dạng đầu vào</strong><code>TK|MK|Tên|LV</code><code>TK|MK|UID|NAME|LV|SKIN|SS|SSS|SKIN_HIEM|MYSTIC|MAIL|PHONE</code><p>Cũng hỗ trợ dữ liệu có nhãn như <code>UID: 123 | NAME: Tên | LEVEL: 30</code>.</p></div><div class="notice">Chế độ trên máy lưu trong trình duyệt hiện tại khi bật Tự động lưu. Dữ liệu gồm mật khẩu được lưu dạng văn bản, không phải kho bí mật mã hóa. Tránh nhập mật khẩu thật hoặc sử dụng trên thiết bị chung. Dùng bản sao JSON để chuyển dữ liệu sang máy khác.</div><p class="small">Phím tắt: <kbd>/</kbd> tìm công cụ · <kbd>Esc</kbd> đóng menu hoặc hướng dẫn.</p></dialog><div class="toast" id="toast" role="status" aria-live="polite"></div><input type="file" id="hiddenRestore" accept=".json,application/json" hidden>
+    <script src="./config.js"></script>
     <script>/* APP_SCRIPT */</script>
 
 <script>/* MAIL_SCRIPT */</script>

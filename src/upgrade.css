@@ -1,4 +1,4 @@
-/* Garena Filter Pro V4 — a calm, accessible workspace. No external assets. */
+/* Garena Filter Pro V5 — a calm, accessible workspace. No external assets. */
 :root {
   --bg:#f4f6f8; --panel:#fff; --text:#172c3b; --muted:#687986; --line:#e0e7eb;
   --blue:#087f72; --blue2:#087f72; --input:#fbfcfd; --shadow:0 2px 3px #16364903;
@@ -241,3 +241,8 @@ body.dark .auth-submit {color:#082e28}
  .toolbar .btn,.tool-actions .btn {min-height:42px;font-size:11px}
  .table-wrap:has(.empty) .empty {padding:32px 18px}
 }
+
+/* V5: deployment badge and small-screen safety fixes */
+.v5-tag { display:inline-flex;align-items:center;padding:2px 5px;margin-left:4px;background:var(--accent-soft);border-radius:4px;color:var(--accent-text);font-size:9px;vertical-align:middle;letter-spacing:.5px; }
+@media(max-width:540px) { .topbar {padding:10px 12px;} .topbar h1{font-size:13px;} .top-actions{flex-wrap:wrap;justify-content:flex-end;gap:5px} .top-actions .user-pill{max-width:85px} .cloud-status{max-width:110px} .auth-card{padding:22px;} }
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}

@@ -193,7 +193,7 @@
                 authReady = false;
                 clearAuthWorkspace();
                 currentUser = null;
-                safeStorageSet(MODE_STORAGE_KEY, 'local');
+                safeStorageSet(MODE_STORAGE_KEY, isSupabaseConfigured() ? 'cloud' : 'local');
                 showAuthScreen();
                 setAuthMode('login');
                 setCloudStatus('');
@@ -231,7 +231,7 @@
             }
             async function ensureAuthClient() {
                 if(supabaseClient) {attachAuthObserver();return supabaseClient;}
-                if(SUPABASE_URL.includes('YOUR-PROJECT')||SUPABASE_ANON_KEY.includes('YOUR_SUPABASE'))throw Error('Chưa cấu hình dịch vụ đám mây.');
+                if(!isSupabaseConfigured())throw Error('Chưa cấu hình Supabase trong config.js. Bạn vẫn dùng được chế độ trên máy.');
                 await window.GFPLoadSDK('supabase');
                 if(!supabaseClient)supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
                 attachAuthObserver();$('authConfig').style.display='none';return supabaseClient;
@@ -241,13 +241,15 @@
                 $('signupTab').onclick = () => setAuthMode('signup');
                 $('localModeBtn')?.addEventListener('click', enterLocalMode);
                 $('logoutBtn').onclick = logoutWorkspace;
-                const configured = !SUPABASE_URL.includes('YOUR-PROJECT') && !SUPABASE_ANON_KEY.includes('YOUR_SUPABASE');
+                const configured = isSupabaseConfigured();
                 try {
                     if (configured && window.supabase?.createClient) supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
                 } catch (_) { supabaseClient = null; }
                 if (!supabaseClient) {
                     $('authConfig').style.display = 'block';
-                    $('authConfig').textContent = 'Dịch vụ đám mây được tải khi bạn đăng nhập. Cần có kết nối Internet.';
+                    $('authConfig').textContent = configured
+                        ? 'Đám mây đã được cấu hình. Khi đăng nhập, cần Internet và bảng dữ liệu Supabase có RLS phù hợp.'
+                        : 'Chưa bật đồng bộ đám mây. Chọn “Dùng trên máy” để sử dụng đầy đủ công cụ ngay. Muốn đăng nhập Supabase, điền Project URL và publishable key vào config.js rồi tải lại trang.';
                 }
                 $('authForm').addEventListener('submit', async event => {
                     event.preventDefault();
@@ -310,6 +312,12 @@
                         }
                     } catch (error) { if (epoch === authEpoch) showAuthMessage(error.message); }
                     if (epoch !== authEpoch) return;
+                }
+                // A fresh GitHub Pages/Netlify origin must offer cloud login first.
+                // Preserve a user's explicit local-mode choice across reloads.
+                if (configured && safeStorageGet(MODE_STORAGE_KEY) !== 'local') {
+                    showAuthScreen();
+                    return;
                 }
                 enterLocalMode();
             }

@@ -14,7 +14,10 @@ const user = id => ({ id, email: `${id}@example.test` });
 
 function harness(t, options = {}) {
     const elements = new Map(), timers = new Set();
+    // Existing regression tests simulate a user who previously selected local mode.
+    // Pass freshOrigin=true to simulate opening the configured app on a new host.
     const storage = new Map(options.storage || []);
+    if (!options.freshOrigin && !storage.has('garena_filter_v4_mode')) storage.set('garena_filter_v4_mode', 'local');
     const calls = { loads: [], writes: [], signins: [], signups: [], signouts: [], sdkLoads: [], pages: [], toasts: [], resets: [], history: 0 };
     const controls = { load: () => Promise.resolve({ data: { payload: { accounts: [], sets: {} } }, error: null }), write: () => Promise.resolve({ error: null }), signin: () => Promise.resolve({ data: { user: user('alice'), session: { user: user('alice') } }, error: null }), signout: () => Promise.resolve({ error: null }), session: null, loader: () => Promise.resolve() };
     let authListener;
@@ -61,6 +64,7 @@ function harness(t, options = {}) {
         document: { querySelector(selector) { return selector === '[data-settings-pane="password"]' ? el('passwordPane') : null; } },
         localStorage: { getItem: key => storage.get(key) ?? null, setItem(key, value) { if (options.storageBlocked) throw new Error('Storage denied'); storage.set(key, value); } },
         SUPABASE_URL: 'https://mock.example.test', SUPABASE_ANON_KEY: 'test-public-key',
+        isSupabaseConfigured: () => true,
         supabaseClient: null, currentUser: null, authReady: false, authMode: 'login', cloudSaveTimer: null, STORAGE: '',
         accounts: [], sets: {}, selected: new Set(), page: 1,
         validatePayload(payload) { if (!Array.isArray(payload?.accounts) || !payload.accounts.every(a => a && typeof a.tk === 'string')) throw new Error('Invalid payload'); return { accounts: payload.accounts, sets: payload.sets || {} }; },
@@ -84,6 +88,18 @@ test('startup enters local workspace without loading an SDK or calling auth', as
     assert.deepEqual(h.calls.loads, []);
     assert.deepEqual(h.calls.signins, []);
     assert.equal(h.el('localModeBtn').disabled, false);
+});
+
+test('configured cloud opens login first on a new GitHub Pages or Netlify origin', async t => {
+    const h = harness(t, { freshOrigin: true });
+    await h.init();
+    assert.equal(h.ctx.currentUser, null);
+    assert.equal(h.el('mainApp').classList.contains('hidden'), true);
+    assert.equal(h.el('authScreen').classList.contains('hidden'), false);
+    assert.equal(h.el('localModeBtn').disabled, false);
+    assert.deepEqual(h.calls.signins, []);
+    h.el('localModeBtn').click();
+    assert.equal(h.ctx.currentUser.id, 'local-workspace');
 });
 
 test('persist(false) respects autosave; persist(true) saves an explicit snapshot', async t => {

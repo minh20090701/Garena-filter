@@ -32,7 +32,7 @@ async function check(name, test) {
   const context = await browser.newContext({viewport:{width:1440,height:1080},acceptDownloads:true});
   const external = [];
   await context.route(/^https?:\/\//, async route => {
-    if(route.request().url()===url) return route.fulfill({contentType:'text/html',body:await fs.readFile(path.join(root,'Garena_Filter_Pro_V4.html'),'utf8')});
+    if(route.request().url()===url) return route.fulfill({contentType:'text/html',body:await fs.readFile(path.join(root,'index.html'),'utf8')});
     if(!route.request().url().startsWith('http://localhost:8765/')) external.push(route.request().url());
     return route.abort();
   });

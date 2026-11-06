@@ -14,7 +14,7 @@ const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function start(options = {}) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1080 }, acceptDownloads: true, ...options });
   await context.route(/^https?:\/\//, async route => {
-    if (route.request().url() === url) return route.fulfill({ contentType: 'text/html', body: await fs.readFile(path.join(root, 'Garena_Filter_Pro_V4.html'), 'utf8') });
+    if (route.request().url() === url) return route.fulfill({ contentType: 'text/html', body: await fs.readFile(path.join(root, 'index.html'), 'utf8') });
     return route.abort();
   });
   const page = await context.newPage();

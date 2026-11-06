@@ -1,11 +1,17 @@
 {
-  "name": "garena-filter-pro-v4",
-  "version": "4.0.0",
+  "name": "garena-filter-pro-v5",
+  "version": "5.0.0",
   "private": true,
-  "description": "Standalone Vietnamese data workspace",
+  "description": "GitHub Pages ready, local-first account data workspace",
   "scripts": {
     "build": "python3 build.py",
-    "test": "node tests/auth.test.cjs && node tests/browser.cjs && node tests/mail.test.cjs && node tests/edge.test.cjs"
+    "test:auth": "node tests/auth.test.cjs",
+    "test:browser": "node tests/browser.cjs",
+    "test:mail": "node tests/mail.test.cjs",
+    "test:edge": "node tests/edge.test.cjs",
+    "test": "npm run build && npm run test:auth && npm run test:browser && npm run test:mail && npm run test:edge"
   },
-  "devDependencies": {"playwright": "1.62.1"}
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
 }

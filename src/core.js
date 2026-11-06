@@ -2,9 +2,13 @@
         (() => {
             'use strict';
             const $ = id => document.getElementById(id);
-            // Supabase Project Settings > API: dùng Project URL + publishable/anon key; tuyệt đối không dùng service_role key.
-            const SUPABASE_URL = 'https://ahungpttcxsujkkchggh.supabase.co/';
-            const SUPABASE_ANON_KEY = 'sb_publishable_cungjzsSEwB1dIDSgRWwlQ_Fy5lg9zF';
+            // V5: Configuration is optional and loaded from config.js.
+            // Do not commit a Supabase service_role/secret key to a public repository.
+            const PUBLIC_CONFIG = window.GFP_CONFIG || {};
+            const SUPABASE_URL = String(PUBLIC_CONFIG.supabaseUrl || '').trim();
+            const SUPABASE_ANON_KEY = String(PUBLIC_CONFIG.supabaseAnonKey || '').trim();
+            const isSupabaseConfigured = () => /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(SUPABASE_URL)
+                && /^(sb_publishable_|eyJ)/.test(SUPABASE_ANON_KEY);
             let supabaseClient = null, currentUser = null, authMode = 'login', cloudSaveTimer = null, authReady = false;
             let accounts = [], viewRows = [], selected = new Set(), page = 1, sortMode = 'original', restoreText = ''; let STORAGE = 'garena_filter_v23_rebuild';
             const cols = ['tk', 'mk', 'uid', 'name', 'lv', 'skin', 'ss', 'sss', 'rare', 'mystic', 'mail', 'phone'];
